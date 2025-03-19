@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.austincaron.jellycatapp"
     },
     "web": {
       "bundler": "metro",
@@ -32,10 +33,30 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/rubik/Rubik_300Light.ttf",
+            "node_modules/@expo-google-fonts/rubik/Rubik_400Regular.ttf",
+            "node_modules/@expo-google-fonts/rubik/Rubik_500Medium.ttf",
+            "node_modules/@expo-google-fonts/rubik/Rubik_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/rubik/Rubik_700Bold.ttf"
+          ]
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7ed4f894-a11c-4f55-a9c3-4f031be71546"
+      }
     }
   }
 }
