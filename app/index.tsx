@@ -1,31 +1,33 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import { BlurView } from 'expo-blur';
+import LatestList from '@/components/LatestList';
 
 export default function HomeScreen() {
   const text = "Welcome, Year of the Snake";
+
   return (
-    <View>
+    <ScrollView style={{height: '100%', backgroundColor: "#fff"}} contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.hero}>
         <Image source={require('../assets/images/year-of-the-snake.png')} style={styles.heroImage} />
-          <BlurView style={styles.blurContainer} intensity={100} tint="dark" experimentalBlurMethod='dimezisBlurView' blurReductionFactor={8}>
-            <Text style={{
-                fontFamily: 'Rubik_700Bold',
-                fontSize: 32,
-                zIndex: 1,
-                color: 'white'
-              }}>{text}</Text>
-          </BlurView>
+        <BlurView style={styles.blurContainer} intensity={100} tint="dark">
+          <Text style={[styles.title, styles.heroTitle]}>{text}</Text>
+        </BlurView>
       </View>
-    </View>
+      <View style={{ marginTop: 51 }}>
+        <Text style={[styles.title, styles.headingSmall]}>Latest In</Text>
+        <LatestList />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
 
   hero: {
-    height: '85%',
+    height: 600,
     position: 'relative',
-    display: 'flex',   
+    display: 'flex',
+    flex: 1   
   },
 
   heroImage: {
@@ -51,5 +53,20 @@ const styles = StyleSheet.create({
     boxSizing: 'border-box',
     overflow: 'hidden',
     zIndex: 1,
+  },
+
+  title: {
+    fontFamily: 'Rubik_700Bold'
+  },
+
+  heroTitle: {
+    fontSize: 32,
+    zIndex: 1,
+    color: 'white'
+  },
+
+  headingSmall: {
+    fontSize: 30,
+    marginLeft: 15
   }
 });
