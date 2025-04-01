@@ -8,7 +8,7 @@ const LatestList = () => {
       data={data}
       horizontal={true}
       style={styles.container}
-      contentContainerStyle={{ gap: 20, paddingLeft: 15 }} // Adjust paddingLeft here
+      contentContainerStyle={{ gap: 14, paddingLeft: 15, paddingRight: 15 }} // Adjust paddingLeft here
       keyExtractor={(item) => item.name}
       renderItem={({ item }) => (
         <View style={{ width: 163 }}>
@@ -19,7 +19,9 @@ const LatestList = () => {
               onError={(e) => console.error("Image load error:", e.nativeEvent.error)}
             />
           </View>
-          <Text style={styles.text}>{item.name}</Text>
+          <View style={{display: 'flex', justifyContent: 'center' }}>
+            <Text style={styles.text}>{item.name}</Text>
+          </View>
         </View>
       )}
     />
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Rubik_400Regular',
     fontSize: 14,
     marginTop: 14,
+    textAlign: 'center',
   }
 });
 

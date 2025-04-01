@@ -1,6 +1,7 @@
 import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import { BlurView } from 'expo-blur';
 import LatestList from '@/components/LatestList';
+import CommunityCard from '@/components/CommunityCard';
 
 export default function HomeScreen() {
   const text = "Welcome, Year of the Snake";
@@ -16,6 +17,9 @@ export default function HomeScreen() {
       <View style={{ marginTop: 51 }}>
         <Text style={[styles.title, styles.headingSmall]}>Latest In</Text>
         <LatestList />
+      </View>
+      <View style={{ marginTop: 51 }}>
+        <CommunityCard />
       </View>
     </ScrollView>
   );
