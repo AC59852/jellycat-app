@@ -33,9 +33,10 @@ export default function RootLayout() {
         headerShown: false,
       }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="(categories)/index" />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="dark" />
+      <StatusBar style="dark" translucent={true} backgroundColor='transparent' />
     </ThemeProvider>
   );
 }
