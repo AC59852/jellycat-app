@@ -4,6 +4,7 @@ import { BlurView } from 'expo-blur';
 import LatestList from '@/components/LatestList';
 import CommunityCard from '@/components/CommunityCard';
 import CategoryCard from '@/components/CategoryCard';
+import CtaSignup from '@/components/CtaSignup';
 
 export default function HomeScreen() {
   const text = "Welcome, Year of the Snake";
@@ -52,6 +53,9 @@ export default function HomeScreen() {
             <Text>View All</Text>
           </Link>
         </View>
+      </View>
+      <View>
+        <CtaSignup />
       </View>
     </ScrollView>
   );
