@@ -2,8 +2,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { fetch } from 'expo/fetch';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
-import CategoryCard from '@/components/CategoryCard';
 import SearchComponent from '@/components/SearchComponent';
+import ProductCard from '@/components/ProductCard';
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -40,9 +40,14 @@ export default function DetailsScreen() {
     return <Text>No data found</Text>;
   }
 
-  const renderItem = ({ item }: { item: { name: string; image: string } }) => {
+  const renderItem = ({ item }: { item: { name: string; image: string, theme: string, colour: string } }) => {
     return (
-      <CategoryCard name={item.name} image={{ uri: item.image }} />
+      <ProductCard
+        name={item.name}
+        image={item.image}
+        theme={item.theme}
+        colour={item.colour}
+      />
     );
   };
 

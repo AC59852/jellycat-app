@@ -13,7 +13,7 @@ const CategoryCard = ({ name, image }: CategoryCardProps) => {
   return (
     <Link href={{
       pathname: `/(categories)/[id]`, // Use the correct path for your app
-      params: { id: name.toLowerCase() }, // Pass the category name as a parameter
+      params: { id: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
     }} style={styles.categoryCard}>
       <View style={{ width: "100%"}}>
         <Image source={image} style={styles.categoryImg} />
