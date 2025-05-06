@@ -11,7 +11,7 @@ const CommunityCard = () => {
           style={styles.image}
         />
       </View>
-      <View style={{ display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: 'center', height: "100%", gap: 20 }}>
+      <View style={{ display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: 'center', height: "100%", gap: 24 }}>
         <Text style={styles.text}>See What the Community is up to!</Text>
         <Link
           href="/"
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
 
   text: {
     fontFamily: "Rubik_700Bold",
-    fontSize: 32,
+    fontSize: 28,
     width: "95%",
     textAlign: "center",
     color: "white",
@@ -53,11 +53,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     backgroundColor: "#4570FF",
-    paddingVertical: 14,
-    paddingHorizontal: 20,
+    paddingVertical: 12,
     borderRadius: 4,
     textDecorationLine: "none",
-    width: "50%",
+    width: "48%",
     marginHorizontal: "auto",
   }
 });
