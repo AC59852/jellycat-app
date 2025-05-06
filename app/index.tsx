@@ -1,4 +1,5 @@
 import { ScrollView, View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import 'react-native-svg';
 import { Link } from "expo-router";
 import { BlurView } from 'expo-blur';
 import LatestList from '@/components/LatestList';

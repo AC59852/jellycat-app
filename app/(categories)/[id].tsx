@@ -64,6 +64,7 @@ export default function DetailsScreen() {
         columnWrapperStyle={{ justifyContent: 'space-between' }} // Adjust spacing between columns
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
         showsHorizontalScrollIndicator={false} // Hide horizontal scroll indicator
+        style={{ width: '100%' }} // Ensure the FlatList takes full width
       />
     </View>
   );
