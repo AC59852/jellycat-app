@@ -1,5 +1,6 @@
 import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { Link } from "expo-router";
+import BackSvg from "./svgs/BackSvg.tsx";
 import { useState } from "react";
 
 const SearchComponent = () => {
@@ -7,13 +8,13 @@ const SearchComponent = () => {
   <View style={styles.container}>
     <View style={styles.imageWrapper}>
       <Link href={"/"} style={styles.backButton}>
-        <Image source={require("@/assets/icons/arrow-left.svg")} style={styles.back} />
+        <BackSvg />
       </Link>
     </View>
     <View style={styles.searchWrapper}>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search for Jellycats..."
+        placeholder="Search"
         placeholderTextColor="#A0A0A0"
       />
       <Link href={"/"} style={styles.searchButton}>
@@ -27,6 +28,38 @@ const SearchComponent = () => {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 50,
+    backgroundColor: "blue",
+    width: "90%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  imageWrapper: {
+    width: 25,
+    height: 25,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  backButton: {
+    width: 25,
+    height: 25,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  searchWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  }
+})
 
 export default SearchComponent;
