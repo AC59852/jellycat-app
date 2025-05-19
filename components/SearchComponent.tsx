@@ -1,6 +1,6 @@
 import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { Link } from "expo-router";
-import BackSvg from "./svgs/BackSvg.tsx";
+import BackSvg from "./svgs/BackSvg";
 import { useState } from "react";
 
 const SearchComponent = () => {
