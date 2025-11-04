@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, Link } from 'expo-router';
 import { fetch } from 'expo/fetch';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
@@ -6,7 +6,7 @@ import SearchComponent from '@/components/SearchComponent';
 import ProductCard from '@/components/ProductCard';
 
 export default function DetailsScreen() {
-  const { id } = useLocalSearchParams();
+  const { category } = useLocalSearchParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +14,7 @@ export default function DetailsScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://jellycat-category-fetch.austin-caron1.workers.dev?category=${id}`);
+        const response = await fetch(`https://jellycat-category-fetch.austin-caron1.workers.dev?category=${category}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -28,7 +28,7 @@ export default function DetailsScreen() {
     };
 
     fetchData();
-  }, [id]);
+  }, [category]);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -42,12 +42,17 @@ export default function DetailsScreen() {
 
   const renderItem = ({ item }: { item: { name: string; image: string, theme: string, colour: string } }) => {
     return (
-      <ProductCard
-        name={item.name}
-        image={item.image}
-        theme={item.theme}
-        colour={item.colour}
-      />
+      <Link href={{
+        pathname: `/(jellycat)/jellycat/[item]`,
+        params: { item: item.name.toLowerCase().split(' ').join('-') },
+      }}>
+        <ProductCard
+          name={item.name}
+          image={item.image}
+          theme={item.theme}
+          colour={item.colour}
+        />
+      </Link>
     );
   };
 

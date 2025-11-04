@@ -7,13 +7,13 @@ interface CategoryCardProps {
   image: any; // Replace 'any' with a more specific type if possible, e.g., ImageSourcePropType
 }
 
-const _width  = Dimensions.get('screen').width * 0.44
+const _width  = Dimensions.get('screen').width * 0.45
 
 const CategoryCard = ({ name, image }: CategoryCardProps) => {
   return (
     <Link href={{
-      pathname: `/(categories)/[id]`, // Use the correct path for your app
-      params: { id: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
+      pathname: `/(categories)/[category]`, // Use the correct path for your app
+      params: { category: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
     }} style={styles.categoryCard}>
       <View style={{ width: "100%"}}>
         <Image source={image} style={styles.categoryImg} />
@@ -28,10 +28,9 @@ const CategoryCard = ({ name, image }: CategoryCardProps) => {
 const styles = StyleSheet.create({
 
   categoryCard: {
-    width: "45%",
-    display: "flex",
-    flexDirection: "column",
-    flex: 0.5,
+    width: _width,
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: _width * 0.1,
   },
 

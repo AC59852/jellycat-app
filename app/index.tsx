@@ -43,11 +43,14 @@ export default function HomeScreen() {
       <View style={{ marginTop: 59 }}>
         <Text style={[styles.title, styles.headingSmall]}>Find Jellycats Based on Category:</Text>
         <View style={styles.categoriesList}>
-          <FlatList
+          {/* <FlatList
             numColumns={2}
             data={categories}
             renderItem={renderItem}
-          />
+          /> */}
+          {categories.map((item, index) => (
+            <CategoryCard key={index} name={item.name} image={item.image} />
+          ))}
         </View>
         <View style={{paddingHorizontal: 15, marginBottom: 20}}>
           <Link href="/" style={styles.button}>
@@ -112,12 +115,13 @@ const styles = StyleSheet.create({
   },
 
   categoriesList: {
-    width: '100%',
+    width: '93%',
     marginTop: 12,
-    flex: 1,
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15,
+    flexWrap: 'wrap',
+    marginHorizontal: 'auto',
   },
 
   button: {

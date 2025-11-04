@@ -42,6 +42,7 @@ export default function RootLayout() {
       }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="(categories)/index" />
+        <Stack.Screen name="(jellycat)/index" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="dark" translucent={true} backgroundColor='transparent' />
