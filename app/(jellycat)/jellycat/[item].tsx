@@ -1,12 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Button } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { fetch } from "expo/fetch";
 import { useEffect, useState } from "react";
 import HeartSvg from "@/components/HeartSvg";
+import BackSvg from "@/components/svgs/BackSvg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const JellycatDetailsScreen = () => {
   const { item } = useLocalSearchParams();
-  const router = useRouter();
+  const Router = useRouter();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,45 +52,78 @@ const JellycatDetailsScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <View style={styles.imageWrapper}>
-          <Image source={{ uri: data.image }} style={styles.image} />
-          <TouchableOpacity onPress={() => alert("this worked")} style={styles.icon}>
+  <SafeAreaView>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
+      <View style={styles.wrapper}>
+        <TouchableOpacity style={styles.backButton} onPress={() => Router.back()}>
+          <BackSvg />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert("this worked")} style={styles.icon}>
             <HeartSvg />
           </TouchableOpacity>
+        <View style={styles.imageWrapper}>
+          <Image source={{ uri: data.image }} style={styles.image} />
         </View>
         <Text style={styles.title}>{data.name}</Text>
         <Text style={styles.description}>{data.description}</Text>
+
+        {/* Button pinned to bottom */}
+        <TouchableOpacity onPress={() => alert("Added to My Collection")} style={styles.addButton}>
+          <Text style={styles.addButtonText}>Add to My Collection</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.moreInfoWrapper}>
+        <Text style={[styles.title, styles.titleSmall]}>More Info</Text>
+        {/* colours, release date, and category in a horizontal row each with a title and then their descriptor */}
+        <View style={{ flexDirection: 'row', marginTop: 20, gap: 25 }}>
+          <View>
+            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Colours</Text>
+            <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.colour}</Text>
+          </View>
+          <View>
+            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Release Date</Text>
+            <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.releaseDate}</Text>
+          </View>
+          <View>
+            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Category</Text>
+            <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.theme}</Text>
+          </View>
+        </View>
       </View>
     </ScrollView>
-  );
+  </SafeAreaView>
+);
+
 }
 
 const styles = StyleSheet.create({
   container: {
-    margin: "auto",
-    width: '90%'
+    width: '90%',
+    margin: 'auto'
+  },
+
+  scrollContent: {
+    flexGrow: 1, // makes scroll fill remaining height
+  },
+
+  wrapper: {
+    flex: 1,
+    width: '90%',
+    alignSelf: 'center',
   },
 
   imageWrapper: {
     position: 'relative',
-    marginTop: 60,
+    height: 338,
   },
 
   image: {
     width: '100%',
-    height: 338,
-  },
-
-  titleWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 16,
+    height: '100%',
   },
 
   title: {
-    fontSize: 34,
+    fontSize: 32,
     fontFamily: 'Rubik_700Bold',
     marginTop: 20,
     color: '#333333',
@@ -102,6 +137,10 @@ const styles = StyleSheet.create({
     color: '#666666',
   },
 
+  titleSmall: {
+    fontSize: 26
+  },
+
   icon: {
     backgroundColor: "#F6F8FA",
     borderRadius: 50,
@@ -109,9 +148,39 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     position: 'absolute',
-    top: 20,
+    top: 25,
     right: 10,
+    zIndex: 10,
+  },
+
+  addButton: {          
+    backgroundColor: '#4570FF',
+    paddingVertical: 24,
+    borderRadius: 4,
+    width: '100%',
+    marginTop: 28,
+    alignItems: 'center',
+  },
+
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'Rubik_500Medium',
+  },
+
+  moreInfoWrapper: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 40,
+  },
+
+  backButton: {
+    width: 24,
+    height: 24,
+    marginTop: 25,
   },
 });
+
 
 export default JellycatDetailsScreen;

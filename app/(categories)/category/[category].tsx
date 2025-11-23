@@ -10,6 +10,9 @@ export default function DetailsScreen() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // create a variable that capitalizes the first letter of the category and removes hyphens
+  const formattedCategory = category ? String(category).replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase()) : '';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +61,6 @@ export default function DetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <SearchComponent />
       {/* add a flatlist using the data grabbed from the fetch and category card */}
       <FlatList
         data={data}
@@ -70,6 +72,12 @@ export default function DetailsScreen() {
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
         showsHorizontalScrollIndicator={false} // Hide horizontal scroll indicator
         style={{ width: '100%' }} // Ensure the FlatList takes full width
+        ListHeaderComponent={
+          <View>
+            <SearchComponent />
+            <Text style={{fontSize: 30, fontFamily: 'Rubik_700Bold', width: '90%', textAlign: 'left', marginTop: 32  }}>{formattedCategory}</Text>
+          </View>
+        }
       />
     </View>
   );

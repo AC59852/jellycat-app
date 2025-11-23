@@ -12,7 +12,7 @@ const _width  = Dimensions.get('screen').width * 0.45
 const CategoryCard = ({ name, image }: CategoryCardProps) => {
   return (
     <Link href={{
-      pathname: `/(categories)/[category]`, // Use the correct path for your app
+      pathname: `/(categories)/category/[category]`, // Use the correct path for your app
       params: { category: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
     }} style={styles.categoryCard}>
       <View style={{ width: "100%"}}>
