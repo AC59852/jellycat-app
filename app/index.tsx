@@ -55,7 +55,7 @@ export default function HomeScreen() {
       <View style={styles.hero}>
         <View style={styles.heroImageWrapper}>
           <Animated.Image
-            source={require('@/assets/images/heroimg-christmas.png')}
+            source={require('@/assets/images/heroimg.png')}
             style={[styles.heroImage, imageAnimatedStyle]}
             resizeMode="cover"
             accessible
