@@ -7,6 +7,19 @@ import FilterSvg from "./svgs/FilterSvg";
 const SearchComponent = () => {
   const Router = useRouter();
 
+  const [text, setText] = useState("");
+
+  const pushToSearch = (query: string) => {
+    return () => {
+      if (query.trim().length > 0) { 
+        Router.push({
+          pathname: "/search",
+          params: { query: query },
+        });
+      }
+    };
+  };
+
   return (
   <View style={styles.container}>
     <View style={styles.imageWrapper}>
@@ -19,9 +32,11 @@ const SearchComponent = () => {
         style={styles.searchInput}
         placeholder="Search"
         placeholderTextColor="#A0A0A0"
+        onSubmitEditing={pushToSearch(text)}
+        onChangeText={setText}
       />
       <Link href={"/"} style={styles.searchButton}>
-        <Image source={require("@/assets/icons/search.svg")} style={styles.search} />
+        <Image source={require("@/assets/icons/search.svg")}/>
       </Link>
     </View>
     <View style={styles.imageWrapper}>

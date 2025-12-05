@@ -75,7 +75,7 @@ const JellycatDetailsScreen = () => {
       <View style={styles.moreInfoWrapper}>
         <Text style={[styles.title, styles.titleSmall]}>More Info</Text>
         {/* colours, release date, and category in a horizontal row each with a title and then their descriptor */}
-        <View style={{ flexDirection: 'row', marginTop: 20, gap: 25 }}>
+        <View style={{ flexDirection: 'row', marginTop: 20, gap: 25, marginBottom: 80 }}>
           <View>
             <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Colours</Text>
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.colour}</Text>

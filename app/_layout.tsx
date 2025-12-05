@@ -43,6 +43,7 @@ const MyTheme = {
         headerShown: false,
       }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="search" />
         <Stack.Screen name="(categories)/category/[category]" />
         <Stack.Screen name="(jellycat)/jellycat/[item]" />
         <Stack.Screen name="+not-found" />

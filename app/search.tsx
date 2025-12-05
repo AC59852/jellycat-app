@@ -5,27 +5,22 @@ import { useEffect, useState } from 'react';
 import SearchComponent from '@/components/SearchComponent';
 import ProductCard from '@/components/ProductCard';
 
-interface ItemProps {
-  name: string;
-  image: string;
-  theme: string;
-  colour: string;
-  id: string;
-}
-
 export default function DetailsScreen() {
-  const { category } = useLocalSearchParams();
+  const { query } = useLocalSearchParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // create a variable that capitalizes the first letter of the category and removes hyphens
-  const formattedCategory = category ? String(category).replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase()) : '';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://jellycat-category-fetch.austin-caron1.workers.dev?category=${category}`);
+        let response;
+
+        if (query) {
+          response = await fetch(`https://jellycat-category-fetch.austin-caron1.workers.dev/search?q=${query}`);
+        } else {
+          response = await fetch(`https://jellycat-category-fetch.austin-caron1.workers.dev?category=bunnies`);
+        }
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -39,7 +34,7 @@ export default function DetailsScreen() {
     };
 
     fetchData();
-  }, [category]);
+  }, [query]);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -51,7 +46,7 @@ export default function DetailsScreen() {
     return <Text>No data found</Text>;
   }
 
-  const renderItem = ({ item }: { item: ItemProps }) => {
+  const renderItem = ({ item }: { item: { name: string; image: string, theme: string, colour: string } }) => {
     return (
       <Link href={{
         pathname: `/(jellycat)/jellycat/[item]`,
@@ -62,7 +57,6 @@ export default function DetailsScreen() {
           image={item.image}
           theme={item.theme}
           colour={item.colour}
-          id={item.id}
         />
       </Link>
     );
@@ -84,7 +78,7 @@ export default function DetailsScreen() {
         ListHeaderComponent={
           <View>
             <SearchComponent />
-            <Text style={{fontSize: 30, fontFamily: 'Rubik_700Bold', width: '90%', textAlign: 'left', marginTop: 32  }}>{formattedCategory}</Text>
+            <Text style={{fontSize: 30, fontFamily: 'Rubik_700Bold', width: '90%', textAlign: 'left', marginTop: 32  }}>Search Results For: {query ? query : 'Bunnies'}</Text>
           </View>
         }
       />
@@ -97,5 +91,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: '100%'
   },
 });

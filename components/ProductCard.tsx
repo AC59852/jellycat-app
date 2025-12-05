@@ -1,40 +1,83 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
-import Svg, {Path} from 'react-native-svg';
-import { Link } from "expo-router";
 import { useState, useEffect } from 'react';
+import { File, Paths } from 'expo-file-system';
 import HeartSvg from "./HeartSvg";
 
 interface ProductCardProps {
   name: string;
-  image: any; // Replace 'any' with a more specific type if possible, e.g., ImageSourcePropType
-  theme: string,
-  colour: string
+  image: string;
+  theme: string;
+  colour: string;
+  id: string;
+  onUnlike?: () => void;
 }
 
-const _width  = Dimensions.get('screen').width * 0.435;
+const _width = Dimensions.get('screen').width * 0.435;
 
-const ProductCard = ({ name, image, theme, colour }: ProductCardProps) => {
+const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardProps) => {
+  const [isLiked, setIsLiked] = useState(false);
+
+  // Load liked state from file once when component mounts
+  useEffect(() => {
+    try {
+      const file = new File(Paths.document, 'likes.json');
+      if (file.exists) {
+        const json = JSON.parse(file.textSync()) as { id: string }[];
+        const liked = json.some(item => item.id === id);
+        setIsLiked(liked);
+      }
+    } catch (err) {
+      console.error('Error reading likes:', err);
+    }
+  }, []);
+
+  // Toggle like and write to file
+  const toggleLike = () => {
+    try {
+      const file = new File(Paths.document, 'likes.json');
+      let likes: { id: string }[] = [];
+
+      // Load existing likes file
+      if (file.exists) {
+        likes = JSON.parse(file.textSync());
+      }
+
+      if (!isLiked) {
+        // LIKE the product
+        likes.push({ id });
+        file.write(JSON.stringify(likes));
+        setIsLiked(true);
+      } else {
+        // UNLIKE the product
+        likes = likes.filter((item) => item.id !== id);
+        file.write(JSON.stringify(likes));
+        setIsLiked(false);
+      }
+    } catch (err) {
+      console.error('Error writing like file:', err);
+    }
+  };
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.imageWrapper}>
         <Image source={{ uri: image }} style={styles.image} />
+        {/* Like Button */}
         <View style={styles.iconWrapper}>
-          <TouchableOpacity onPress={() => alert("this worked")} style={styles.icon}>
-            <HeartSvg />
+          <TouchableOpacity onPress={() => { toggleLike(); if (onUnlike) onUnlike(); }} style={styles.icon}>
+            <HeartSvg filled={isLiked} />
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Text */}
       <View style={styles.textWrapper}>
-        <View style={styles.tagsWrapper}>
-          <Text style={styles.tags}>{theme}, {colour}</Text>
-        </View>
-        <View style={styles.nameWrapper}>
-          <Text style={styles.name}>{name}</Text>
-        </View>
+        <Text style={styles.tags}>{theme}, {colour}</Text>
+        <Text style={styles.name}>{name}</Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: {

@@ -11,11 +11,7 @@ export default function NavigationBar() {
     <View style={styles.navbarContainer}>
       <View style={styles.navbarWrapper}>
         {/* Blur layer */}
-        <BlurView
-          intensity={37} // change this freely
-          // experimentalBlurMethod="dimezisBlurView"
-          style={StyleSheet.absoluteFillObject}
-        />
+       
 
         {/* Dark overlay on top of blur */}
         <View style={styles.overlay} />
@@ -27,8 +23,8 @@ export default function NavigationBar() {
           </View>
         </Link>
 
-        <Link href='/(categories)/category/bunnies'>
-          <View style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category')) && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
+        <Link href='/search'>
+          <View style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category') || pathname.startsWith('/search')) && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
             <Image source={require('../assets/icons/searchIcon.png')} style={{width: 24, height: 26}} />
           </View>
         </Link>
@@ -39,7 +35,7 @@ export default function NavigationBar() {
           </View>
         </Link>
 
-        <Link href='/'>
+        <Link href='/profile'>
           <View style={styles.navIcon}>
             <Image source={require('../assets/icons/homeIcon.png')} style={{width: 24, height: 26,}} />
           </View>
@@ -56,6 +52,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 30,
     alignItems: 'center',
+    backgroundColor: "transparent",
+    zIndex: 1000,
   },
 
   navbarWrapper: {
