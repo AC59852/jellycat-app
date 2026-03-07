@@ -12,6 +12,7 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 0,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -57,6 +58,7 @@
       "eas": {
         "projectId": "7ed4f894-a11c-4f55-a9c3-4f031be71546"
       }
-    }
+    },
+    "owner": "austincaron"
   }
 }

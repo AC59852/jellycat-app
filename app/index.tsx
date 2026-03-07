@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import 'react-native-svg';
 import { Link } from "expo-router";
 import { BlurView } from 'expo-blur';
@@ -6,9 +6,34 @@ import LatestList from '@/components/LatestList';
 import CommunityCard from '@/components/CommunityCard';
 import CategoryCard from '@/components/CategoryCard';
 import CtaSignup from '@/components/CtaSignup';
+import Animated, {
+  useAnimatedRef,
+  useAnimatedStyle,
+  useScrollOffset,
+  interpolate,
+  Extrapolation,
+} from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const text = "Welcome, Year of the Snake";
+  const text = "Find Your Perfect Companion!";
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollOffset = useScrollOffset(scrollRef);
+
+  // Parallax only within the hero section
+  const imageAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: scrollOffset.value * 0.2 }],
+  }));
+
+  // Brightness overlay: darkens image as you scroll down
+  const brightnessOverlayStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      scrollOffset.value,
+      [0, 300],       // scroll range
+      [0, 0.5],       // overlay opacity range (0 = none, 0.5 = noticeable darkening)
+      Extrapolation.CLAMP
+    );
+    return { opacity };
+  });
 
   const categories = [
     { name: "Bunnies", image: require('@/assets/images/bunnies-categories.png') },
@@ -17,107 +42,135 @@ export default function HomeScreen() {
     { name: "Bashfuls", image: require('@/assets/images/bashfuls-categories.png') },
     { name: "Nature", image: require('@/assets/images/nature-categories.png') },
     { name: "Sea Creatures", image: require('@/assets/images/sea-creatures-categories.png') },
-  ]
-
-  const renderItem = ({ item }) => {
-    return (
-      <CategoryCard name={item.name} image={item.image} />
-    )
-  }
+  ];
 
   return (
-    <ScrollView style={{height: '100%', backgroundColor: "#fff"}} contentContainerStyle={{flexGrow: 1}}>
+    <View style={{ flex: 1 }}>
+    <Animated.ScrollView
+      style={styles.container}
+      ref={scrollRef}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Hero Section */}
       <View style={styles.hero}>
-        <Image source={require('@/assets/images/year-of-the-snake.png')} style={styles.heroImage} />
-        <BlurView style={styles.blurContainer} intensity={100} tint="dark">
+        <View style={styles.heroImageWrapper}>
+          <Animated.Image
+            source={require('@/assets/images/hero.jpg')}
+            style={[styles.heroImage, imageAnimatedStyle]}
+            resizeMode="cover"
+            accessible
+            accessibilityLabel="Two Jellycat hearts arranged in a car at a drive-in theater for Valentine's Day"
+          />
+
+          {/* Brightness overlay */}
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.heroOverlay, brightnessOverlayStyle]}
+          />
+        </View>
+
+        <View
+          style={styles.blurContainer}
+        >
           <Text style={[styles.title, styles.heroTitle]}>{text}</Text>
-        </BlurView>
+        </View>
       </View>
+
+      {/* Rest of the scroll content */}
       <View style={{ marginTop: 51 }}>
         <Text style={[styles.title, styles.headingSmall]}>Latest In</Text>
         <LatestList />
       </View>
+
       <View style={{ marginTop: 59 }}>
         <CommunityCard />
       </View>
+
       <View style={{ marginTop: 59 }}>
-        <Text style={[styles.title, styles.headingSmall]}>Find Jellycats Based on Category:</Text>
+        <Text style={[styles.title, styles.headingSmall]}>
+          Find Jellycats Based on Category:
+        </Text>
         <View style={styles.categoriesList}>
-          <FlatList
-            numColumns={2}
-            data={categories}
-            renderItem={renderItem}
-          />
+          {categories.map((item, index) => (
+            <CategoryCard key={index} name={item.name} image={item.image} />
+          ))}
         </View>
-        <View style={{paddingHorizontal: 15, marginBottom: 20}}>
-          <Link href="/" style={styles.button}>
+        <View style={{ paddingHorizontal: 15, marginBottom: 20 }}>
+          <Link href="/(categories)/all" style={styles.button}>
             <Text>View All</Text>
           </Link>
         </View>
       </View>
+
       <View>
         <CtaSignup />
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
 
   hero: {
     height: 600,
-    position: 'relative',
-    display: 'flex',
-    flex: 1   
+    overflow: 'hidden', // contains the image
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    marginBottom: 20,
+  },
+
+  heroImageWrapper: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
   },
 
   heroImage: {
     width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: -1,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    height: '100%'
   },
-  
+
+  // This is what we animate for brightness
+  heroOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'black', // change to 'white' to simulate brightening instead
+  },
+
   blurContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 15,
     width: '85%',
     borderRadius: 13,
-    position: 'relative',
-    marginTop: 'auto',
-    marginLeft: 15,
-    marginBottom: 20,
     padding: 14,
-    boxSizing: 'border-box',
-    overflow: 'hidden',
-    zIndex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
   },
 
   title: {
-    fontFamily: 'Rubik_700Bold'
+    fontFamily: 'Rubik_700Bold',
   },
 
   heroTitle: {
-    fontSize: 32,
-    zIndex: 1,
-    color: 'white'
+    fontSize: 30,
+    color: 'white',
   },
 
   headingSmall: {
-    fontSize: 30,
-    marginLeft: 15
+    fontSize: 28,
+    marginLeft: 15,
   },
 
   categoriesList: {
-    width: '100%',
+    width: '93%',
     marginTop: 12,
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15,
+    flexWrap: 'wrap',
+    alignSelf: 'center',
   },
 
   button: {
@@ -131,6 +184,6 @@ const styles = StyleSheet.create({
     textDecorationLine: "none",
     width: "100%",
     marginHorizontal: "auto",
-    marginTop: 5
-  }
+    marginTop: 5,
+  },
 });
