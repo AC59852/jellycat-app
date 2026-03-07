@@ -15,7 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const text = "Merry Christmas & Happy Holidays!";
+  const text = "Find Your Perfect Companion!";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollOffset(scrollRef);
 
@@ -55,11 +55,11 @@ export default function HomeScreen() {
       <View style={styles.hero}>
         <View style={styles.heroImageWrapper}>
           <Animated.Image
-            source={require('@/assets/images/hero.webp')}
+            source={require('@/assets/images/hero.jpg')}
             style={[styles.heroImage, imageAnimatedStyle]}
             resizeMode="cover"
             accessible
-            accessibilityLabel="Jellycat stuffed animals arranged in a festive holiday scene"
+            accessibilityLabel="Two Jellycat hearts arranged in a car at a drive-in theater for Valentine's Day"
           />
 
           {/* Brightness overlay */}
@@ -69,13 +69,11 @@ export default function HomeScreen() {
           />
         </View>
 
-        <BlurView
+        <View
           style={styles.blurContainer}
-          intensity={90}
-          tint="dark"
         >
           <Text style={[styles.title, styles.heroTitle]}>{text}</Text>
-        </BlurView>
+        </View>
       </View>
 
       {/* Rest of the scroll content */}
@@ -98,7 +96,7 @@ export default function HomeScreen() {
           ))}
         </View>
         <View style={{ paddingHorizontal: 15, marginBottom: 20 }}>
-          <Link href="/" style={styles.button}>
+          <Link href="/(categories)/all" style={styles.button}>
             <Text>View All</Text>
           </Link>
         </View>
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
     width: '85%',
     borderRadius: 13,
     padding: 14,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
   },
 
   title: {

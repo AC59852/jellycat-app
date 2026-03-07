@@ -23,6 +23,7 @@ const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardPr
       const file = new File(Paths.document, 'likes.json');
       if (file.exists) {
         const json = JSON.parse(file.textSync()) as { id: string }[];
+
         const liked = json.some(item => item.id === id);
         setIsLiked(liked);
       }

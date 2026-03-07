@@ -1,17 +1,38 @@
-import React from "react";
+import {useEffect, useState} from "react";
 import { View, Text, Image, FlatList, StyleSheet } from "react-native";
-import data from "@/assets/jellycat-data.json";
+import { Link } from "expo-router";
 
 const LatestList = () => {
+  const [data, setData] = useState<Array<{ title: string; image: string }>>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://jellycat-category-fetch.austin-caron1.workers.dev/recents');
+        const result = await response.json();
+        setData(result);
+
+        console.log("Fetched latest items:", result);
+      } catch (error) {
+        console.error("Error fetching latest items:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <FlatList
       data={data}
       horizontal={true}
       style={styles.container}
       contentContainerStyle={{ gap: 14, paddingLeft: 15, paddingRight: 15 }} // Adjust paddingLeft here
-      keyExtractor={(item) => item.name}
+      keyExtractor={(item) => item.title}
       renderItem={({ item }) => (
-        <View style={{ width: 163 }}>
+        <Link href={{
+          pathname: `/(jellycat)/jellycat/[item]`,
+          params: { item: item.title.toLowerCase().split(' ').join('-') },
+        }} style={{ width: 163 }}>
           <View style={styles.imageWrapper}>
             <Image
               source={{ uri: item.image }}
@@ -20,9 +41,9 @@ const LatestList = () => {
             />
           </View>
           <View style={{display: 'flex', justifyContent: 'center' }}>
-            <Text style={styles.text}>{item.name}</Text>
+            <Text style={styles.text}>{item.title}</Text>
           </View>
-        </View>
+        </Link>
       )}
     />
   );

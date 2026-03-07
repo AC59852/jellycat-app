@@ -9,7 +9,7 @@ export default function CtaSignup() {
         <Image source={require("../assets/images/bunny-coffee-running.png")} style={styles.image} />
       </View>
       <View style={{ display: "flex", flexDirection: 'column', gap: 13, marginTop: 40 }}>
-        <Text style={[styles.text, styles.heading]}>Sign Up for Even More Amazing Perks!</Text>
+        <Text style={[styles.text, styles.heading]}>Enjoy More of what NAME Has to Offer!</Text>
         <Text style={[styles.text, styles.paragraph]}>Create a wishlist, scan Jellycats from a photo, checklist ones you already own, and so much more!</Text>
       </View>
       <Link href="/" style={styles.button}>
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     width: "97%",
     margin: "auto", 
     marginTop: 59,
-    marginBottom: 40
+    marginBottom: 120
   },
 
   image: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     paddingVertical: 21,
     borderRadius: 4,
     textDecorationLine: "none",
-    width: "60%",
+    width: "93%",
     marginHorizontal: "auto",
     marginTop: 27
   }

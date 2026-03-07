@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import ProductCard from '@/components/ProductCard';
 import { File, Paths } from 'expo-file-system';
 import { fetch } from 'expo/fetch';
+import { Link } from 'expo-router';
 
 interface DataProps {
   name: string;
@@ -19,85 +20,110 @@ export default function ProfileScreen() {
   const [collections, setCollections] = useState<DataProps[]>([]);
   const [likes, setLikes] = useState<DataProps[]>([]);
 
-  // --- Loaders for each file ---
+  // -----------------------------
+  // LOAD COLLECTIONS
+  // -----------------------------
   const loadCollections = useCallback(() => {
     try {
       const file = new File(Paths.document, 'collection.json');
-      if (file.exists) {
-        const data = JSON.parse(file.textSync()) as DataProps[];
-        setCollections(data);
+
+      if (!file.exists) {
+        setCollections([]);
+        return;
       }
+
+      const data = JSON.parse(file.textSync()) as DataProps[];
+      setCollections(data);
+
     } catch (err) {
       console.error('Error loading collections:', err);
     }
   }, []);
 
+  // -----------------------------
+  // LOAD LIKES FROM Cloudflare
+  // -----------------------------
   const loadLikes = useCallback(async () => {
-  try {
-    const file = new File(Paths.document, 'likes.json');
-    if (!file.exists) {
-      setLikes([]);
-      return;
+    try {
+      const file = new File(Paths.document, "likes.json");
+
+      if (!file.exists) {
+        setLikes([]);
+        return;
+      }
+
+      // read the saved local data
+      const ids = JSON.parse(file.textSync()) as { id: string }[];
+
+      // sanitize the array
+      const sanitizedIds = ids.filter(item => typeof item.id === 'string' && item.id.trim() !== '');
+
+      if (sanitizedIds.length === 0) {
+        setLikes([]);
+        return;
+      }
+
+      // Build query using comma separated ids
+      const queryIds = ids.map(i => i.id).join(",");
+      const url = `https://jellycat-category-fetch.austin-caron1.workers.dev/likes?ids=${queryIds}`;
+
+      const res = await fetch(url);
+      const text = await res.text(); // get raw for debugging
+      console.log("Likes fetch response:", text);
+
+      // parse JSON result
+      const cloudLikes = JSON.parse(text);
+      setLikes(cloudLikes);
+
+    } catch (err) {
+      console.error("Error fetching likes:", err);
     }
+  }, []);
 
-    const ids = JSON.parse(file.textSync()) as { id: string }[];
-    if (ids.length === 0) {
-      setLikes([]);
-      return;
+  // -----------------------------
+  // UNLIKE LOCAL + REMOVE FROM UI
+  // -----------------------------
+  const unlikeItem = async (id: string) => {
+    try {
+      const file = new File(Paths.document, "likes.json");
+
+      if (!file.exists) return;
+
+      const arr = JSON.parse(file.textSync());
+      const newArr = arr.filter((item: any) => item.id !== id);
+
+      // write updated array
+      file.write(JSON.stringify(newArr));
+
+      // remove instantly from UI
+      setLikes(prev => prev.filter(item => item.id !== id));
+
+    } catch (err) {
+      console.error("Error updating likes.json:", err);
     }
+  };
 
-    // Build URL: /likes?ids=a,b,c
-    const url = `https://jellycat-category-fetch.austin-caron1.workers.dev/likes?ids=${ids
-      .map(i => i.id)
-      .join(",")}`;
-
-    const res = await fetch(url);
-    const cloudLikes = await res.json();
-
-    setLikes(cloudLikes);
-
-  } catch (err) {
-    console.error("Error fetching likes:", err);
-  }
-}, []);
-
-const unlikeItem = async (id: string) => {
-  try {
-    const file = new File(Paths.document, "likes.json");
-
-    if (!file.exists) return;
-
-    const raw = file.textSync();
-    const arr = JSON.parse(raw);
-
-    const newArr = arr.filter((item: any) => item.id !== id);
-
-    // write new file
-    file.write(JSON.stringify(newArr));
-
-    // instantly remove from UI
-    setLikes(prev => prev.filter(item => item.id !== id));
-
-  } catch (err) {
-    console.error("Error updating likes.json:", err);
-  }
-};
-
-  // --- Run specific loader when tab changes ---
+  // -----------------------------
+  // LOAD DATA WHEN TAB SWITCHES
+  // -----------------------------
   useEffect(() => {
     if (selectedTab === 'Collections') {
       loadCollections();
-    } else if (selectedTab === 'Likes') {
+    } else {
       loadLikes();
     }
   }, [selectedTab, loadCollections, loadLikes]);
 
-  // Choose which data to show
+  // Choose which list to show
   const dataToRender =
     selectedTab === 'Collections' ? collections : likes;
 
+  // -----------------------------
+  // UI
+  // -----------------------------
   return (
     <View style={{ flex: 1 }}>
+
       {/* HEADER */}
       <View style={{ padding: 20 }}>
         <Image />
@@ -106,7 +132,10 @@ const unlikeItem = async (id: string) => {
         {/* TABS */}
         <View style={{ flexDirection: 'row', marginTop: 20 }}>
           {tabs.map((tab) => (
-            <TouchableOpacity key={tab} onPress={() => setSelectedTab(tab)}>
+            <TouchableOpacity
+              key={tab}
+              onPress={() => setSelectedTab(tab)}
+            >
               <Text
                 style={{
                   marginRight: 20,
@@ -129,17 +158,22 @@ const unlikeItem = async (id: string) => {
       <FlatList
         data={dataToRender}
         renderItem={({ item }) => (
-          <ProductCard
-            name={item.name}
-            image={item.image}
-            theme={item.theme}
-            colour={item.colour}
-            id={item.id}
-            key={item.id}
-            onUnlike={selectedTab === 'Likes' ? () => unlikeItem(item.id) : undefined}
-          />
+          <Link href={{
+            pathname: `/(jellycat)/jellycat/[item]`,
+            params: { item: item.name.toLowerCase().split(' ').join('-') },
+          }}>
+            <ProductCard
+              name={item.name}
+              image={item.image}
+              theme={item.theme}
+              colour={item.colour}
+              id={item.id}
+              key={item.id}
+              onUnlike={selectedTab === 'Likes' ? () => unlikeItem(item.id) : undefined}
+            />
+          </Link>
         )}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.id}
         ListEmptyComponent={
           <Text style={{ textAlign: 'center' }}>
             No items found

@@ -25,19 +25,19 @@ export default function NavigationBar() {
 
         <Link href='/search'>
           <View style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category') || pathname.startsWith('/search')) && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
-            <Image source={require('../assets/icons/searchIcon.png')} style={{width: 24, height: 26}} />
+            <Image source={require('../assets/icons/searchIcon.png')} style={{width: 26, height: 26}} />
           </View>
         </Link>
 
-        <Link href='/'>
+        {/* <Link href='/'>
           <View style={styles.navIcon}>
             <Image source={require('../assets/icons/homeIcon.png')} style={{width: 24, height: 26}} />
           </View>
-        </Link>
+        </Link> */}
 
         <Link href='/profile'>
-          <View style={styles.navIcon}>
-            <Image source={require('../assets/icons/homeIcon.png')} style={{width: 24, height: 26,}} />
+          <View style={[styles.navIcon, pathname === '/profile' && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
+            <Image source={require('../assets/icons/profileIcon.png')} style={{width: 34, height: 34,}} />
           </View>
         </Link>
       </View>

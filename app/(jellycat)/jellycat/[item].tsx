@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { File, Paths } from 'expo-file-system';
 import { fetch } from "expo/fetch";
 import { useEffect, useState } from "react";
 import HeartSvg from "@/components/HeartSvg";
@@ -12,6 +13,49 @@ const JellycatDetailsScreen = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLiked, setIsLiked] = useState(false);
+
+   // Load liked state from file once when component mounts
+    useEffect(() => {
+      try {
+        const file = new File(Paths.document, 'likes.json');
+        if (file.exists) {
+          const json = JSON.parse(file.textSync()) as { id: string }[];
+  
+          const liked = json.some(likedItem => likedItem.id === item);
+          setIsLiked(liked);
+        }
+      } catch (err) {
+        console.error('Error reading likes:', err);
+      }
+    }, []);
+  
+    // Toggle like and write to file
+    const toggleLike = () => {
+      try {
+        const file = new File(Paths.document, 'likes.json');
+        let likes: { id: string }[] = [];
+  
+        // Load existing likes file
+        if (file.exists) {
+          likes = JSON.parse(file.textSync());
+        }
+  
+        if (!isLiked) {
+          // LIKE the product
+          likes.push({ id: item as string });
+          file.write(JSON.stringify(likes));
+          setIsLiked(true);
+        } else {
+          // UNLIKE the product
+          likes = likes.filter((likedItem) => likedItem.id !== item);
+          file.write(JSON.stringify(likes));
+          setIsLiked(false);
+        }
+      } catch (err) {
+        console.error('Error writing like file:', err);
+      }
+    };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,8 +102,8 @@ const JellycatDetailsScreen = () => {
         <TouchableOpacity style={styles.backButton} onPress={() => Router.back()}>
           <BackSvg />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert("this worked")} style={styles.icon}>
-            <HeartSvg />
+        <TouchableOpacity onPress={() => { toggleLike(); }} style={styles.icon}>
+            <HeartSvg  filled={isLiked} />
           </TouchableOpacity>
         <View style={styles.imageWrapper}>
           <Image source={{ uri: data.image }} style={styles.image} />
@@ -80,11 +124,11 @@ const JellycatDetailsScreen = () => {
             <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Colours</Text>
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.colour}</Text>
           </View>
-          <View>
+          <View style={{flex: 1}}>
             <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Release Date</Text>
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.releaseDate}</Text>
           </View>
-          <View>
+          <View style={{flex: 1}}>
             <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Category</Text>
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.theme}</Text>
           </View>

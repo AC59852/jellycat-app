@@ -57,6 +57,7 @@ export default function DetailsScreen() {
           image={item.image}
           theme={item.theme}
           colour={item.colour}
+          id={item.name.toLowerCase().split(' ').join('-')}
         />
       </Link>
     );

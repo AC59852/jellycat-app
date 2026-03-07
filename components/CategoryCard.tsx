@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
   heading: {
     fontFamily: "Rubik_700Bold",
-    fontSize: 20,
+    fontSize: 18,
     textAlign: "center",
     marginTop: 10,
   }
