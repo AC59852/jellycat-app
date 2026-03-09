@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import 'react-native-svg';
 import { Link } from "expo-router";
 import { BlurView } from 'expo-blur';
@@ -43,6 +43,87 @@ export default function HomeScreen() {
     { name: "Nature", image: require('@/assets/images/nature-categories.png') },
     { name: "Sea Creatures", image: require('@/assets/images/sea-creatures-categories.png') },
   ];
+
+  const { height } = useWindowDimensions();
+  const heroHeight = height * 0.75; // Match the hero section height
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+    },
+
+    hero: {
+      height: heroHeight,
+      overflow: 'hidden', // contains the image
+      borderBottomLeftRadius: 25,
+      borderBottomRightRadius: 25,
+      marginBottom: 20,
+    },
+
+    heroImageWrapper: {
+      ...StyleSheet.absoluteFillObject,
+      overflow: 'hidden',
+    },
+
+    heroImage: {
+      width: '100%',
+      height: '100%'
+    },
+
+    // This is what we animate for brightness
+    heroOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: 'black', // change to 'white' to simulate brightening instead
+    },
+
+    blurContainer: {
+      position: 'absolute',
+      bottom: 20,
+      left: 15,
+      width: '85%',
+      borderRadius: 13,
+      padding: 14,
+      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    },
+
+    title: {
+      fontFamily: 'Rubik_700Bold',
+    },
+
+    heroTitle: {
+      fontSize: 30,
+      color: 'white',
+    },
+
+    headingSmall: {
+      fontSize: 28,
+      marginLeft: 15,
+    },
+
+    categoriesList: {
+      width: '93%',
+      marginTop: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      alignSelf: 'center',
+    },
+
+    button: {
+      fontFamily: "Rubik_600SemiBold",
+      fontSize: 18,
+      textAlign: "center",
+      color: "white",
+      backgroundColor: "#4570FF",
+      paddingVertical: 20,
+      borderRadius: 4,
+      textDecorationLine: "none",
+      width: "100%",
+      marginHorizontal: "auto",
+      marginTop: 5,
+    },
+  });
 
   return (
     <View style={{ flex: 1 }}>
@@ -109,81 +190,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-
-  hero: {
-    height: 600,
-    overflow: 'hidden', // contains the image
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    marginBottom: 20,
-  },
-
-  heroImageWrapper: {
-    ...StyleSheet.absoluteFillObject,
-    overflow: 'hidden',
-  },
-
-  heroImage: {
-    width: '100%',
-    height: '100%'
-  },
-
-  // This is what we animate for brightness
-  heroOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'black', // change to 'white' to simulate brightening instead
-  },
-
-  blurContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 15,
-    width: '85%',
-    borderRadius: 13,
-    padding: 14,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
-  },
-
-  title: {
-    fontFamily: 'Rubik_700Bold',
-  },
-
-  heroTitle: {
-    fontSize: 30,
-    color: 'white',
-  },
-
-  headingSmall: {
-    fontSize: 28,
-    marginLeft: 15,
-  },
-
-  categoriesList: {
-    width: '93%',
-    marginTop: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    alignSelf: 'center',
-  },
-
-  button: {
-    fontFamily: "Rubik_600SemiBold",
-    fontSize: 18,
-    textAlign: "center",
-    color: "white",
-    backgroundColor: "#4570FF",
-    paddingVertical: 20,
-    borderRadius: 4,
-    textDecorationLine: "none",
-    width: "100%",
-    marginHorizontal: "auto",
-    marginTop: 5,
-  },
-});

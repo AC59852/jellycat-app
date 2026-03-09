@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
+import { View, Text, Image, StyleSheet, useWindowDimensions } from "react-native";
 import { Link } from "expo-router";
 
 interface CategoryCardProps {
@@ -7,25 +7,11 @@ interface CategoryCardProps {
   image: any; // Replace 'any' with a more specific type if possible, e.g., ImageSourcePropType
 }
 
-const _width  = Dimensions.get('screen').width * 0.45
-
 const CategoryCard = ({ name, image }: CategoryCardProps) => {
-  return (
-    <Link href={{
-      pathname: `/(categories)/category/[category]`, // Use the correct path for your app
-      params: { category: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
-    }} style={styles.categoryCard}>
-      <View style={{ width: "100%"}}>
-        <Image source={image} style={styles.categoryImg} />
-      </View>
-      <View style={{width: "100%"}}>
-        <Text style={styles.heading}>{name}</Text>
-      </View>
-    </Link>
-  );
-}
+  const { width } = useWindowDimensions();
+  const _width = width * 0.45;
 
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
 
   categoryCard: {
     width: _width,
@@ -49,5 +35,20 @@ const styles = StyleSheet.create({
   }
 
 });
+
+  return (
+    <Link href={{
+      pathname: `/(categories)/category/[category]`, // Use the correct path for your app
+      params: { category: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
+    }} style={styles.categoryCard}>
+      <View style={{ width: "100%"}}>
+        <Image source={image} style={styles.categoryImg} />
+      </View>
+      <View style={{width: "100%"}}>
+        <Text style={styles.heading}>{name}</Text>
+      </View>
+    </Link>
+  );
+}
 
 export default CategoryCard;
