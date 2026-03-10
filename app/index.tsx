@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions, PixelRatio } from 'react-native';
 import 'react-native-svg';
 import { Link } from "expo-router";
 import { BlurView } from 'expo-blur';
@@ -44,7 +44,7 @@ export default function HomeScreen() {
     { name: "Sea Creatures", image: require('@/assets/images/sea-creatures-categories.png') },
   ];
 
-  const { height } = useWindowDimensions();
+  const { width, height, fontScale, scale } = useWindowDimensions();
   const heroHeight = height * 0.75; // Match the hero section height
 
   const styles = StyleSheet.create({
@@ -155,6 +155,15 @@ export default function HomeScreen() {
         >
           <Text style={[styles.title, styles.heroTitle]}>{text}</Text>
         </View>
+      </View>
+
+      <View>
+        <Text>width: {width}</Text>
+        <Text>height: {height}</Text>
+        <Text>fontScale: {fontScale}</Text>
+        <Text>scale: {scale}</Text>
+        <Text>pixelRatio: {PixelRatio.get()}</Text>
+        <Text>fontScale: {PixelRatio.getFontScale()}</Text>
       </View>
 
       {/* Rest of the scroll content */}
