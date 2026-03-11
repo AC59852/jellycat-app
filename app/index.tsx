@@ -108,6 +108,8 @@ export default function HomeScreen() {
       justifyContent: 'space-between',
       flexWrap: 'wrap',
       alignSelf: 'center',
+      gap: 12,
+      marginBottom: 20,
     },
 
     button: {

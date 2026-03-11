@@ -9,7 +9,7 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ name, image }: CategoryCardProps) => {
   const { width } = useWindowDimensions();
-  const _width = width * 0.45;
+  const _width = (width - 43) / 2;
 
   const styles = StyleSheet.create({
 
@@ -38,14 +38,14 @@ const CategoryCard = ({ name, image }: CategoryCardProps) => {
 
   return (
     <Link href={{
-      pathname: `/(categories)/category/[category]`, // Use the correct path for your app
-      params: { category: name.toLowerCase().split(' ').join('-') }, // Pass the category name as a parameter
-    }} style={styles.categoryCard}>
-      <View style={{ width: "100%"}}>
-        <Image source={image} style={styles.categoryImg} />
-      </View>
-      <View style={{width: "100%"}}>
-        <Text style={styles.heading}>{name}</Text>
+      pathname: `/(categories)/category/[category]`,
+      params: { category: name.toLowerCase().split(' ').join('-') },
+    }}>
+      <View style={{ width: _width, marginBottom: _width * 0.1 }}>
+        <Image source={image} style={{ width: _width, height: _width, objectFit: "cover", borderRadius: 13 }} />
+        <Text style={{ fontFamily: "Rubik_700Bold", fontSize: 18, textAlign: "center", marginTop: 14 }} allowFontScaling={false}>
+          {name}
+        </Text>
       </View>
     </Link>
   );
