@@ -15,7 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const text = "Find Your Perfect Companion!";
+  const text = "Where Soft Things Bloom.";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollOffset(scrollRef);
 
@@ -128,7 +128,7 @@ export default function HomeScreen() {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
     <Animated.ScrollView
       style={styles.container}
       ref={scrollRef}
@@ -159,14 +159,14 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <View>
+      {/* <View>
         <Text>width: {width}</Text>
         <Text>height: {height}</Text>
         <Text>fontScale: {fontScale}</Text>
         <Text>scale: {scale}</Text>
         <Text>pixelRatio: {PixelRatio.get()}</Text>
         <Text>fontScale: {PixelRatio.getFontScale()}</Text>
-      </View>
+      </View> */}
 
       {/* Rest of the scroll content */}
       <View style={{ marginTop: 51 }}>
@@ -187,16 +187,16 @@ export default function HomeScreen() {
             <CategoryCard key={index} name={item.name} image={item.image} />
           ))}
         </View>
-        <View style={{ paddingHorizontal: 15, marginBottom: 20 }}>
+        <View style={{ paddingHorizontal: 15, marginBottom: 140 }}>
           <Link href="/(categories)/all" style={styles.button}>
             <Text>View All</Text>
           </Link>
         </View>
       </View>
 
-      <View>
+      {/* <View>
         <CtaSignup />
-      </View>
+      </View> */}
     </Animated.ScrollView>
     </View>
   );

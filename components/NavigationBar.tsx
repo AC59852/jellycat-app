@@ -1,4 +1,5 @@
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Link, usePathname } from 'expo-router';
 
@@ -8,7 +9,7 @@ export default function NavigationBar() {
   // alert(pathname);
 
   return (
-    <View style={styles.navbarContainer}>
+    <SafeAreaView style={styles.navbarContainer}>
       <View style={styles.navbarWrapper}>
         {/* Blur layer */}
        
@@ -41,7 +42,7 @@ export default function NavigationBar() {
           </View>
         </Link>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 30,
+    bottom: 10,
     alignItems: 'center',
     backgroundColor: "transparent",
     zIndex: 1000,

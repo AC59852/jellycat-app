@@ -11,7 +11,7 @@ const CommunityCard = () => {
     >
       <View style={styles.overlay}>
         <Text style={styles.text}>See What the Community is up to!</Text>
-        <Link href="/" style={styles.button}>Explore</Link>
+        <Link href="/" style={styles.button}>Coming Soon!</Link>
       </View>
     </ImageBackground>
   )
