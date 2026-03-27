@@ -243,13 +243,6 @@ export default function CollectionDetailScreen() {
           </TouchableOpacity>
 
           {collection.items.map((item) => (
-            <Link
-              key={item.id}
-              href={{
-                pathname: '/(jellycat)/jellycat/[item]',
-                params: { item: item.name.toLowerCase().split(' ').join('-') },
-              }}
-            >
               <ProductCard
                 name={item.name}
                 image={item.image}
@@ -257,7 +250,6 @@ export default function CollectionDetailScreen() {
                 colour={item.colour}
                 id={item.id}
               />
-            </Link>
           ))}
 
           {collection.items.length === 0 && (

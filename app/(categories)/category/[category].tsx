@@ -75,21 +75,14 @@ export default function DetailsScreen() {
         <Text style={{ fontSize: 30, fontFamily: 'Rubik_700Bold', width: '90%', textAlign: 'left', marginTop: 32, marginBottom: 16, paddingHorizontal: 15 }}>{formattedCategory}</Text>
         <View style={styles.grid}>
           {data.map((item: ItemProps) => (
-            <Link
-              key={item.id}
-              href={{
-                pathname: `/(jellycat)/jellycat/[item]`,
-                params: { item: item.name.toLowerCase().split(' ').join('-') },
-              }}
-            >
               <ProductCard
                 name={item.name}
                 image={item.image}
                 theme={item.theme}
                 colour={item.colour}
                 id={item.id}
+                key={item.id}
               />
-            </Link>
           ))}
         </View>
         {hasMore && (
@@ -116,12 +109,14 @@ const styles = StyleSheet.create({
   },
 
   grid: {
+    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    width: '100%',
     gap: 14,
-    padding: 15,
-    paddingBottom: 40,
+    marginHorizontal: 'auto',
+    justifyContent: 'center',
+    paddingBottom: 120,
   },
 
   loadMoreButton: {

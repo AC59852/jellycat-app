@@ -1,12 +1,14 @@
-import { View, Text, Image, StyleSheet, useWindowDimensions } from "react-native";
+import { Link } from "expo-router";
+import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable } from "react-native";
 
 interface CollectionCardProps {
+  id: string;
   name: string;
   description?: string;
   imageSource: any; // local asset from require()
 }
 
-const CollectionCard = ({ name, description, imageSource }: CollectionCardProps) => {
+const CollectionCard = ({ id, name, description, imageSource }: CollectionCardProps) => {
   const { width } = useWindowDimensions();
   const _width = width * 0.430;
 
@@ -50,7 +52,12 @@ const CollectionCard = ({ name, description, imageSource }: CollectionCardProps)
   });
 
   return (
-    <View style={styles.wrapper}>
+    <Link
+      key={id}
+      href={{ pathname: '/(user)/collections/[id]', params: { id: id } }}
+      asChild
+    >
+    <Pressable style={styles.wrapper}>
       <View style={styles.imageWrapper}>
         <Image source={imageSource} style={styles.image} />
       </View>
@@ -58,7 +65,8 @@ const CollectionCard = ({ name, description, imageSource }: CollectionCardProps)
         {description ? <Text style={styles.description}>{description}</Text> : null}
         <Text style={styles.name}>{name}</Text>
       </View>
-    </View>
+    </Pressable>
+    </Link>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, useWindowDimensions } from "react-native";
+import { View, Text, Image, StyleSheet, useWindowDimensions, Pressable } from "react-native";
 import { Link } from "expo-router";
 
 interface CategoryCardProps {
@@ -37,16 +37,34 @@ const CategoryCard = ({ name, image }: CategoryCardProps) => {
 });
 
   return (
-    <Link href={{
-      pathname: `/(categories)/category/[category]`,
-      params: { category: name.toLowerCase().split(' ').join('-') },
-    }}>
-      <View style={{ width: _width, marginBottom: _width * 0.1 }}>
-        <Image source={image} style={{ width: _width, height: _width, objectFit: "cover", borderRadius: 13 }} />
-        <Text style={{ fontFamily: "Rubik_700Bold", fontSize: 18, textAlign: "center", marginTop: 14 }} allowFontScaling={false}>
+    <Link
+      href={{
+        pathname: `/(categories)/category/[category]`,
+        params: { category: name.toLowerCase().split(' ').join('-') },
+      }}
+      asChild
+    >
+      <Pressable style={{ width: _width, marginBottom: _width * 0.1 }}>
+        <Image
+          source={image}
+          style={{
+            width: _width,
+            height: _width,
+            borderRadius: 13,
+          }}
+        />
+        <Text
+          style={{
+            fontFamily: "Rubik_700Bold",
+            fontSize: 18,
+            textAlign: "center",
+            marginTop: 14,
+          }}
+          allowFontScaling={false}
+        >
           {name}
         </Text>
-      </View>
+      </Pressable>
     </Link>
   );
 }

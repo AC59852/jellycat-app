@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Platform, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Link, usePathname } from 'expo-router';
@@ -11,20 +11,20 @@ export default function NavigationBar() {
     <View style={[styles.navbarContainer, { bottom: Math.max(insets.bottom, 10) }]}>
       <View style={styles.navbarWrapper}>
         <View style={styles.overlay} />
-        <Link href='/'>
-          <View style={[styles.navIcon, pathname === '/' && { backgroundColor: '#4570FF', opacity: 1 }]}>
+        <Link href='/' asChild style={[styles.navIcon, pathname === '/' && { backgroundColor: '#4570FF', opacity: 1 }]}>
+          <Pressable>
             <Image source={require('../assets/icons/homeIcon.png')} style={{ width: 24, height: 26 }} />
-          </View>
+          </Pressable>
         </Link>
-        <Link href='/search'>
-          <View style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category') || pathname.startsWith('/search')) && { backgroundColor: '#4570FF', opacity: 1 }]}>
+        <Link href='/search' asChild style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category') || pathname.startsWith('/search')) && { backgroundColor: '#4570FF', opacity: 1 }]}>
+          <Pressable>
             <Image source={require('../assets/icons/searchIcon.png')} style={{ width: 26, height: 26 }} />
-          </View>
+          </Pressable>
         </Link>
-        <Link href='/profile'>
-          <View style={[styles.navIcon, pathname === '/profile' && { backgroundColor: '#4570FF', opacity: 1 }]}>
+        <Link href='/profile' asChild style={[styles.navIcon, pathname === '/profile' && { backgroundColor: '#4570FF', opacity: 1 }]}>
+          <Pressable>
             <Image source={require('../assets/icons/profileIcon.png')} style={{ width: 34, height: 34 }} />
-          </View>
+          </Pressable>
         </Link>
       </View>
     </View>
@@ -65,6 +65,11 @@ const styles = StyleSheet.create({
   width: 46,
   height: 46,
   borderRadius: 3000,
-  opacity: 0.5
+  opacity: 0.5,
 },
+
+active: {
+  backgroundColor: '#4570FF',
+  opacity: 1,
+}
 });

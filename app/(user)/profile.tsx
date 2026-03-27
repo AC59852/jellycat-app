@@ -291,16 +291,13 @@ export default function ProfileScreen() {
               </TouchableOpacity>
 
               {collections.map((item) => (
-                <Link
+                <CollectionCard
+                  name={item.name}
+                  description={item.description}
+                  imageSource={COLLECTION_IMAGES[item.imageIndex]?.image}
+                  id={item.id}
                   key={item.id}
-                  href={{ pathname: '/(user)/collections/[id]', params: { id: item.id } }}
-                >
-                  <CollectionCard
-                    name={item.name}
-                    description={item.description}
-                    imageSource={COLLECTION_IMAGES[item.imageIndex]?.image}
-                  />
-                </Link>
+                />
               ))}
 
               {collections.length === 0 && (
@@ -315,13 +312,6 @@ export default function ProfileScreen() {
                 <Text style={styles.emptyText}>No liked items yet</Text>
               ) : (
                 likes.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={{
-                      pathname: `/(jellycat)/jellycat/[item]`,
-                      params: { item: item.name.toLowerCase().split(' ').join('-') },
-                    }}
-                  >
                     <ProductCard
                       name={item.name}
                       image={item.image}
@@ -330,7 +320,6 @@ export default function ProfileScreen() {
                       id={item.id}
                       onUnlike={() => unlikeItem(item.id)}
                     />
-                  </Link>
                 ))
               )}
             </>

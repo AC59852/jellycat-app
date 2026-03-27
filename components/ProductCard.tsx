@@ -1,7 +1,8 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Pressable } from "react-native";
 import { useState, useEffect } from 'react';
 import { File, Paths } from 'expo-file-system';
 import HeartSvg from "./HeartSvg";
+import { Link } from "expo-router";
 
 interface ProductCardProps {
   name: string;
@@ -62,9 +63,6 @@ const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardPr
   const styles = StyleSheet.create({
   wrapper: {
     width: _width,
-    display: "flex",
-    flexDirection: "column",
-    flex: 0.5,
     marginBottom: 15,
   },
 
@@ -146,23 +144,37 @@ const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardPr
 })
 
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.imageWrapper}>
-        <Image source={{ uri: image }} style={styles.image} resizeMethod="resize" resizeMode="cover" />
-        {/* Like Button */}
-        <View style={styles.iconWrapper}>
-          <TouchableOpacity onPress={() => { toggleLike(); if (onUnlike) onUnlike(); }} style={styles.icon}>
-            <HeartSvg filled={isLiked} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Text */}
-      <View style={styles.textWrapper}>
-        <Text style={styles.tags}>{theme}, {colour}</Text>
-        <Text style={styles.name}>{name}</Text>
-      </View>
-    </View>
+      <Link
+        href={{
+          pathname: `/(jellycat)/jellycat/[item]`,
+          params: { item: id },
+        }}
+        asChild
+      >
+        <Pressable style={styles.wrapper}>
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: image }}
+              style={styles.image}
+              resizeMethod="resize"
+              resizeMode="cover"
+            />
+            {/* Like Button */}
+            <View style={styles.iconWrapper}>
+              <TouchableOpacity onPress={() => { toggleLike(); if (onUnlike) onUnlike(); }} style={styles.icon}>
+                <HeartSvg filled={isLiked} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* Text */}
+          <View style={styles.textWrapper}>
+            <Text style={styles.tags}>{theme}, {colour}</Text>
+            <Text style={styles.name} numberOfLines={2}>
+              {name}
+            </Text>
+          </View>
+        </Pressable>
+      </Link>
   );
 };
 
