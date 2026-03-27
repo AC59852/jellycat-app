@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { File, Paths } from 'expo-file-system';
 import { COLLECTION_IMAGES } from '@/constants/collectionImages';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface NewCollectionModalProps {
   visible: boolean;
@@ -71,7 +72,7 @@ export default function NewCollectionModal({ visible, onClose, onCreated }: NewC
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleClose}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity onPress={handleClose} style={styles.cancelButton}>
               <Text style={styles.cancelText}>Cancel</Text>
@@ -132,7 +133,7 @@ export default function NewCollectionModal({ visible, onClose, onCreated }: NewC
 
             {!!error && <Text style={styles.errorText}>{error}</Text>}
           </ScrollView>
-        </View>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </Modal>
   );

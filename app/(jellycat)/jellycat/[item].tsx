@@ -120,7 +120,7 @@ const JellycatDetailsScreen = () => {
         <Text style={[styles.title, styles.titleSmall]}>More Info</Text>
         {/* colours, release date, and category in a horizontal row each with a title and then their descriptor */}
         <View style={{ flexDirection: 'row', marginTop: 20, gap: 25, marginBottom: 80 }}>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Colours</Text>
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.colour}</Text>
           </View>
@@ -129,7 +129,7 @@ const JellycatDetailsScreen = () => {
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.releaseDate}</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8} style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Category</Text>
+            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Category</Text>
             <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.theme}</Text>
           </View>
         </View>

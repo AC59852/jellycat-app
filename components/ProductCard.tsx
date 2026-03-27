@@ -148,7 +148,7 @@ const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardPr
   return (
     <View style={styles.wrapper}>
       <View style={styles.imageWrapper}>
-        <Image source={{ uri: image }} style={styles.image} />
+        <Image source={{ uri: image }} style={styles.image} resizeMethod="resize" resizeMode="cover" />
         {/* Like Button */}
         <View style={styles.iconWrapper}>
           <TouchableOpacity onPress={() => { toggleLike(); if (onUnlike) onUnlike(); }} style={styles.icon}>

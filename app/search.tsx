@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import SearchComponent from '@/components/SearchComponent';
 import ProductCard from '@/components/ProductCard';
+import SkeletonLoader from '@/components/SkeletonLoader';
 
 interface ItemProps {
   name: string;
@@ -23,14 +24,14 @@ export default function SearchScreen() {
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
 
-  const pageTitle = query ? `SearchResults for "${query}"` : 'Search Results For: Bunnies';
+  const pageTitle = query ? `Results for "${query}"` : 'Bunnies';
 
   const fetchData = async (cursor?: string) => {
     try {
       let url: string;
 
       if (query) {
-        url = `https://jellycat-category-fetch.austin-caron1.workers.dev/search?q=${query}`;
+        url = `https://jellycat-category-fetch.austin-caron1.workers.dev/search?q=${query}${cursor ? `&cursor=${cursor}` : ''}`;
       } else {
         const API_VERSION = 'v2';
         url = `https://jellycat-category-fetch.austin-caron1.workers.dev?category=bunnies&v=${API_VERSION}${cursor ? `&cursor=${cursor}` : ''}`;
@@ -68,46 +69,49 @@ export default function SearchScreen() {
     fetchData(nextCursor);
   };
 
-  if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error}</Text>;
-  if (!data) return <Text>No data found</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%' }}>
         <SearchComponent />
-        <Text style={{ fontSize: 30, fontFamily: 'Rubik_700Bold', width: '90%', textAlign: 'left', marginTop: 32, marginBottom: 16, paddingHorizontal: 15 }}>
-          {pageTitle}
-        </Text>
-        <View style={styles.grid}>
-          {data.map((item: ItemProps) => (
-            <Link
-              key={item.id}
-              href={{
-                pathname: `/(jellycat)/jellycat/[item]`,
-                params: { item: item.name.toLowerCase().split(' ').join('-') },
-              }}
-            >
-              <ProductCard
-                name={item.name}
-                image={item.image}
-                theme={item.theme}
-                colour={item.colour}
-                id={item.id}
-              />
-            </Link>
-          ))}
-        </View>
-        {hasMore && (
-          <TouchableOpacity
-            onPress={loadMore}
-            disabled={loadingMore}
-            style={styles.loadMoreButton}
-          >
-            <Text style={styles.loadMoreText}>
-              {loadingMore ? 'Loading...' : 'Load More'}
-            </Text>
-          </TouchableOpacity>
+        <Text style={styles.pageTitle}>{pageTitle}</Text>
+
+        {loading ? (
+          <SkeletonLoader count={6} />
+        ) : (
+          <>
+            <View style={styles.grid}>
+              {data.map((item: ItemProps) => (
+                <Link
+                  key={item.id}
+                  href={{
+                    pathname: `/(jellycat)/jellycat/[item]`,
+                    params: { item: item.name.toLowerCase().split(' ').join('-') },
+                  }}
+                >
+                  <ProductCard
+                    name={item.name}
+                    image={item.image}
+                    theme={item.theme}
+                    colour={item.colour}
+                    id={item.id}
+                  />
+                </Link>
+              ))}
+            </View>
+            {hasMore && (
+              <TouchableOpacity
+                onPress={loadMore}
+                disabled={loadingMore}
+                style={styles.loadMoreButton}
+              >
+                <Text style={styles.loadMoreText}>
+                  {loadingMore ? 'Loading...' : 'Load More'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -119,6 +123,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  pageTitle: {
+    fontSize: 30,
+    fontFamily: 'Rubik_700Bold',
+    width: '90%',
+    textAlign: 'left',
+    marginTop: 32,
+    marginBottom: 16,
+    paddingHorizontal: 15,
   },
   grid: {
     flexDirection: 'row',
@@ -135,7 +148,7 @@ const styles = StyleSheet.create({
     width: '90%',
     marginHorizontal: 'auto',
     borderRadius: 4,
-    marginBottom: 120,
+    marginBottom: 100,
   },
   loadMoreText: {
     fontFamily: 'Rubik_500Medium',

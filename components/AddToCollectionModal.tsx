@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { fetch } from 'expo/fetch';
 import { File, Paths } from 'expo-file-system';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ItemProps {
   name: string;
@@ -172,7 +173,7 @@ export default function AddToCollectionModal({ visible, collectionId, onClose, o
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleClose}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Add Jellycats</Text>
@@ -212,7 +213,7 @@ export default function AddToCollectionModal({ visible, collectionId, onClose, o
               }
             />
           )}
-        </View>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </Modal>
   );
