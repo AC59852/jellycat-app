@@ -81,11 +81,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <Text style={styles.primaryButtonText}>Next</Text>
           </TouchableOpacity>
         </View>
-
-        <View style={styles.dots}>
-          <View style={[styles.dot, styles.dotActive]} />
-          <View style={styles.dot} />
-        </View>
       </KeyboardAvoidingView>
     );
   }
@@ -258,23 +253,5 @@ const styles = StyleSheet.create({
   bottomSection: {
     paddingHorizontal: 20,
     paddingBottom: 40,
-  },
-
-  // Dots
-  dots: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 20,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#DDDDDD',
-  },
-  dotActive: {
-    backgroundColor: '#4570FF',
-    width: 20,
   },
 });

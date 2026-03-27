@@ -102,13 +102,13 @@ export default function HomeScreen() {
     },
 
     categoriesList: {
-      width: '93%',
+      width: '94%',
       marginTop: 12,
       flexDirection: 'row',
       justifyContent: 'space-between',
       flexWrap: 'wrap',
       alignSelf: 'center',
-      gap: 12,
+      gap: 0,
       marginBottom: 20,
     },
 

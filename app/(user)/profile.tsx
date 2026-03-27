@@ -49,7 +49,7 @@ function readProfile(): UserProfile | null {
 export default function ProfileScreen() {
   const { width } = useWindowDimensions();
   const cardWidth = width * 0.430;
-  const thumbSize = (width - 40 - 72) / 3;
+  const thumbSize = (width - 20 - 24) / 3;
 
   const tabs = ['Collections', 'Likes'] as const;
   const [selectedTab, setSelectedTab] = useState<typeof tabs[number]>('Collections');
@@ -188,13 +188,6 @@ export default function ProfileScreen() {
 
             {/* Fixed top: large preview */}
             <View style={styles.settingsPreviewSection}>
-              <View style={styles.largePreviewWrapper}>
-                <Image
-                  source={COLLECTION_IMAGES[editImageIndex].image}
-                  style={styles.largePreview}
-                  resizeMode="cover"
-                />
-              </View>
 
               {/* Name input */}
               <Text style={styles.settingsLabel}>Display Name</Text>
@@ -205,7 +198,6 @@ export default function ProfileScreen() {
                 placeholder="Your name"
                 placeholderTextColor="#AAAAAA"
                 maxLength={30}
-                textAlign="center"
               />
               {!!editNameError && <Text style={styles.settingsErrorText}>{editNameError}</Text>}
             </View>
@@ -333,7 +325,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
-    paddingTop: 60,
+    paddingTop: 70,
     paddingHorizontal: 20,
     paddingBottom: 24,
   },
@@ -433,7 +425,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 24,
     paddingHorizontal: 20,
-    paddingBottom: 16,
+    paddingBottom: 32,
   },
   largePreviewWrapper: {
     width: 180,
@@ -450,7 +442,7 @@ const styles = StyleSheet.create({
   },
   settingsLabel: {
     fontFamily: 'Rubik_600SemiBold',
-    fontSize: 14,
+    fontSize: 16,
     color: '#333333',
     marginBottom: 8,
     alignSelf: 'flex-start',
@@ -480,8 +472,8 @@ const styles = StyleSheet.create({
   thumbGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-    paddingHorizontal: 20,
+    gap: 6,
+    paddingHorizontal: 15,
     paddingBottom: 40,
     justifyContent: 'center',
   },
