@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "jellycat-app",
-    "slug": "jellycat-app",
-    "version": "1.1.2",
+    "name": "JellyMate",
+    "slug": "jelly-mate",
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -12,7 +12,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 20,
+      "versionCode": 25,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#8BBFF9"
