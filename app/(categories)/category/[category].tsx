@@ -1,9 +1,10 @@
-import { useLocalSearchParams, Link } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { fetch } from 'expo/fetch';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import SearchComponent from '@/components/SearchComponent';
 import ProductCard from '@/components/ProductCard';
+import SkeletonLoader from '@/components/SkeletonLoader';
 
 interface ItemProps {
   name: string;
@@ -15,6 +16,7 @@ interface ItemProps {
 
 export default function DetailsScreen() {
   const { category } = useLocalSearchParams();
+
   const [data, setData] = useState<ItemProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -22,20 +24,31 @@ export default function DetailsScreen() {
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
 
-  const formattedCategory = category ? String(category).replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase()) : '';
+  const formattedCategory = category
+    ? String(category)
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, (char: string) => char.toUpperCase())
+    : '';
 
   const fetchData = async (cursor?: string) => {
     try {
       const API_VERSION = 'v2';
-      const url = `https://jellycat-category-fetch.austin-caron1.workers.dev?category=${category}&v=${API_VERSION}${cursor ? `&cursor=${cursor}` : ''}`;
+
+      const url = `https://jellycat-category-fetch.austin-caron1.workers.dev?category=${category}&v=${API_VERSION}${
+        cursor ? `&cursor=${cursor}` : ''
+      }`;
+
       const response = await fetch(url);
       if (!response.ok) throw new Error('Network response was not ok');
 
       const result = await response.json();
       const items = Array.isArray(result) ? result : result.items;
-      const filtered = items.filter((item: ItemProps) => item.name && item.image);
 
-      setData(prev => cursor ? [...prev, ...filtered] : filtered);
+      const filtered = items.filter(
+        (item: ItemProps) => item.name && item.image
+      );
+
+      setData((prev) => (cursor ? [...prev, ...filtered] : filtered));
       setNextCursor(result.nextCursor ?? null);
       setHasMore(result.hasMore ?? false);
     } catch (error) {
@@ -47,6 +60,11 @@ export default function DetailsScreen() {
   };
 
   useEffect(() => {
+    setData([]);
+    setLoading(true);
+    setNextCursor(null);
+    setHasMore(false);
+
     fetchData();
   }, [category]);
 
@@ -56,45 +74,49 @@ export default function DetailsScreen() {
     fetchData(nextCursor);
   };
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
-
   if (error) {
     return <Text>Error: {error}</Text>;
   }
 
-  if (!data) {
-    return <Text>No data found</Text>;
-  }
-
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%' }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ width: '100%' }}
+      >
         <SearchComponent />
-        <Text style={{ fontSize: 30, fontFamily: 'Rubik_700Bold', width: '90%', textAlign: 'left', marginTop: 32, marginBottom: 16, paddingHorizontal: 15 }}>{formattedCategory}</Text>
-        <View style={styles.grid}>
-          {data.map((item: ItemProps) => (
-              <ProductCard
-                name={item.name}
-                image={item.image}
-                theme={item.theme}
-                colour={item.colour}
-                id={item.id}
-                key={item.id}
-              />
-          ))}
-        </View>
-        {hasMore && (
-          <TouchableOpacity
-            onPress={loadMore}
-            disabled={loadingMore}
-            style={styles.loadMoreButton}
-          >
-            <Text style={styles.loadMoreText}>
-              {loadingMore ? 'Loading...' : 'Load More'}
-            </Text>
-          </TouchableOpacity>
+
+        <Text style={styles.pageTitle}>{formattedCategory}</Text>
+
+        {loading ? (
+          <SkeletonLoader count={6} />
+        ) : (
+          <>
+            <View style={[styles.grid, { paddingBottom: hasMore ? 40 : 120}]}>
+              {data.map((item: ItemProps) => (
+                <ProductCard
+                  key={item.id}
+                  name={item.name}
+                  image={item.image}
+                  theme={item.theme}
+                  colour={item.colour}
+                  id={item.id}
+                />
+              ))}
+            </View>
+
+            {hasMore && (
+              <TouchableOpacity
+                onPress={loadMore}
+                disabled={loadingMore}
+                style={styles.loadMoreButton}
+              >
+                <Text style={styles.loadMoreText}>
+                  {loadingMore ? 'Loading...' : 'Load More'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </>
         )}
       </ScrollView>
     </View>
@@ -108,15 +130,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  pageTitle: {
+    fontSize: 30,
+    fontFamily: 'Rubik_700Bold',
+    width: '90%',
+    textAlign: 'left',
+    marginTop: 32,
+    marginBottom: 16,
+    paddingHorizontal: 15,
+  },
+
   grid: {
-    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '100%',
-    gap: 14,
-    marginHorizontal: 'auto',
     justifyContent: 'center',
-    paddingBottom: 120,
+    gap: 14,
+    padding: 15,
   },
 
   loadMoreButton: {
@@ -132,6 +161,6 @@ const styles = StyleSheet.create({
   loadMoreText: {
     fontFamily: 'Rubik_500Medium',
     fontSize: 16,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   },
 });

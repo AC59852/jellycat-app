@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, useWindowDimensions, PixelRatio } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions, PixelRatio, TouchableOpacity, Pressable } from 'react-native';
 import 'react-native-svg';
 import { Link } from "expo-router";
 import { BlurView } from 'expo-blur';
@@ -187,7 +187,7 @@ export default function HomeScreen() {
             <CategoryCard key={index} name={item.name} image={item.image} />
           ))}
         </View>
-        <View style={{ paddingHorizontal: 15, marginBottom: 140 }}>
+        <View style={{ paddingHorizontal: 15 }}>
           <Link href="/(categories)/all" style={styles.button}>
             <Text>View All</Text>
           </Link>
@@ -197,6 +197,13 @@ export default function HomeScreen() {
       {/* <View>
         <CtaSignup />
       </View> */}
+      {/* footer with copyright year that says "JellyMate. All rights reserved. © {new Date().getFullYear()}" */}
+      <View style={{ paddingVertical: 20, alignItems: 'center', width: '80%', marginHorizontal: 'auto', marginTop: 40, marginBottom: 120 }}>
+        <Link href={'/privacy'}>Privacy Policy</Link>
+        <Text style={{ fontSize: 14, color: '#888', textAlign: 'center' }}>
+          JellyMate © {new Date().getFullYear()}. This site is not affiliated with or authorized by Jellycat Ltd.
+        </Text>
+      </View>
     </Animated.ScrollView>
     </View>
   );

@@ -11,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 interface ItemProps {
   name: string;
   image: string;
-  theme: string;
+  category: string;
   colour: string;
   id: string;
 }
@@ -246,7 +246,7 @@ export default function CollectionDetailScreen() {
               <ProductCard
                 name={item.name}
                 image={item.image}
-                theme={item.theme}
+                theme={item.category}
                 colour={item.colour}
                 id={item.id}
               />

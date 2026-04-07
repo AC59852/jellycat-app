@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 interface LikeProps {
   name: string;
   image: string;
-  theme: string;
+  category: string;
   colour: string;
   id: string;
 }
@@ -307,7 +307,7 @@ export default function ProfileScreen() {
                     <ProductCard
                       name={item.name}
                       image={item.image}
-                      theme={item.theme}
+                      theme={item.category}
                       colour={item.colour}
                       id={item.id}
                       onUnlike={() => unlikeItem(item.id)}
@@ -325,21 +325,21 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
-    paddingTop: 70,
+    paddingTop: 90,
     paddingHorizontal: 20,
     paddingBottom: 24,
   },
   cogButton: {
     position: 'absolute',
-    top: 40,
+    top: 60,
     left: 20,
     padding: 6,
     backgroundColor: "#F6F8FA",
     borderRadius: "100%",
   },
   avatarContainer: {
-    width: 170,
-    height: 170,
+    width: 180,
+    height: 180,
     borderRadius: "100%",
     overflow: 'hidden',
     borderWidth: 1,
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
   tabRow: {
     flexDirection: 'row',
     width: '100%',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     gap: 8,
     marginTop: 25
   },
