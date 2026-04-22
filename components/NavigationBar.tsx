@@ -21,7 +21,7 @@ export default function NavigationBar() {
             <Image source={require('../assets/icons/searchIcon.png')} style={{ width: 26, height: 26 }} />
           </Pressable>
         </Link>
-        <Link href='/profile' asChild style={[styles.navIcon, pathname === '/profile' && { backgroundColor: '#4570FF', opacity: 1 }]}>
+        <Link href='/profile' asChild style={[styles.navIcon, (pathname.startsWith('/profile') || pathname.startsWith('/category') || pathname.startsWith('/collections')) && { backgroundColor: '#4570FF', opacity: 1 }]}>
           <Pressable>
             <Image source={require('../assets/icons/profileIcon.png')} style={{ width: 34, height: 34 }} />
           </Pressable>
