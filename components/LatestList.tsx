@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import { View, Text, Image, FlatList, StyleSheet, Pressable } from "react-native";
 import { Link } from "expo-router";
 
 const LatestList = () => {
@@ -21,38 +21,11 @@ const LatestList = () => {
     fetchData();
   }, []);
 
-  return (
-    <FlatList
-      data={data}
-      horizontal={true}
-      style={styles.container}
-      contentContainerStyle={{ gap: 14, paddingLeft: 15, paddingRight: 15 }} // Adjust paddingLeft here
-      keyExtractor={(item) => item.title}
-      renderItem={({ item }) => (
-        <Link href={{
-          pathname: `/(jellycat)/jellycat/[item]`,
-          params: { item: item.title.toLowerCase().split(' ').join('-') },
-        }} style={{ width: 163 }}>
-          <View style={styles.imageWrapper}>
-            <Image
-              source={{ uri: item.image }}
-              style={styles.image}
-              onError={(e) => console.error("Image load error:", e.nativeEvent.error)}
-            />
-          </View>
-          <View style={{display: 'flex', justifyContent: 'center' }}>
-            <Text style={styles.text}>{item.title}</Text>
-          </View>
-        </Link>
-      )}
-    />
-  );
-};
-
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
   container: {
     width: '100%', // Ensure the FlatList takes full width
-    marginTop: 12
+    marginTop: 12,
+    paddingBottom: 16,
   },
 
   imageWrapper: {
@@ -79,5 +52,41 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   }
 });
+
+  return (
+    <FlatList
+      data={data}
+      horizontal={true}
+      style={styles.container}
+      contentContainerStyle={{ gap: 14, paddingLeft: 15, paddingRight: 15 }} // Adjust paddingLeft here
+      keyExtractor={(item) => item.title}
+      renderItem={({ item }) => (
+        <Link
+          href={{
+            pathname: `/(jellycat)/jellycat/[item]`,
+            params: { item: item.title.toLowerCase().split(' ').join('-') },
+          }}
+          asChild
+        >
+          <Pressable style={{ width: 163 }}>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{ uri: item.image }}
+                style={styles.image}
+              />
+            </View>
+
+            <Text
+              style={styles.text}
+              numberOfLines={2}
+            >
+              {item.title}
+            </Text>
+          </Pressable>
+        </Link>
+      )}
+    />
+  );
+};
 
 export default LatestList;

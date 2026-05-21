@@ -4,14 +4,18 @@ import BackSvg from "./svgs/BackSvg";
 import { useState } from "react";
 import FilterSvg from "./svgs/FilterSvg";
 
-const SearchComponent = () => {
-  const Router = useRouter();
+interface SearchComponentProps {
+  onFilterPress?: () => void;
+  hasActiveFilters?: boolean;
+}
 
+const SearchComponent = ({ onFilterPress, hasActiveFilters }: SearchComponentProps) => {
+  const Router = useRouter();
   const [text, setText] = useState("");
 
   const pushToSearch = (query: string) => {
     return () => {
-      if (query.trim().length > 0) { 
+      if (query.trim().length > 0) {
         Router.push({
           pathname: "/search",
           params: { query: query },
@@ -21,35 +25,35 @@ const SearchComponent = () => {
   };
 
   return (
-  <View style={styles.container}>
-    <View style={styles.imageWrapper}>
-      <TouchableOpacity style={styles.backButton} onPress={() => Router.back()}>
-        <BackSvg />
+    <View style={styles.container}>
+      <View style={styles.imageWrapper}>
+        <TouchableOpacity style={styles.backButton} onPress={() => Router.back()}>
+          <BackSvg />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.searchWrapper}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#A0A0A0"
+          onSubmitEditing={pushToSearch(text)}
+          onChangeText={setText}
+        />
+        <Link href={"/"} style={styles.searchButton}>
+          <Image source={require("@/assets/icons/search.svg")} />
+        </Link>
+      </View>
+      <TouchableOpacity style={styles.filterButtonWrapper} onPress={onFilterPress} activeOpacity={0.7}>
+        <FilterSvg />
+        {hasActiveFilters && <View style={styles.filterDot} />}
       </TouchableOpacity>
     </View>
-    <View style={styles.searchWrapper}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search"
-        placeholderTextColor="#A0A0A0"
-        onSubmitEditing={pushToSearch(text)}
-        onChangeText={setText}
-      />
-      <Link href={"/"} style={styles.searchButton}>
-        <Image source={require("@/assets/icons/search.svg")}/>
-      </Link>
-    </View>
-    <View style={styles.imageWrapper}>
-      <FilterSvg />
-    </View>
-  </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
-    // backgroundColor: "blue",
     width: "95%",
     display: "flex",
     flexDirection: "row",
@@ -101,11 +105,22 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 
-  searchIcon: {
-    width: 16,
-    height: 16,
-    resizeMode: "contain",
+  filterButtonWrapper: {
+    width: 17,
+    height: 17,
+    justifyContent: "center",
+    alignItems: "center",
   },
-})
+
+  filterDot: {
+    position: 'absolute',
+    top: -3,
+    right: -3,
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#4570FF',
+  },
+});
 
 export default SearchComponent;

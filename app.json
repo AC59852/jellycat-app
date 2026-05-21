@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "jellycat-app",
+    "name": "JellyMate",
     "slug": "jellycat-app",
-    "version": "1.0.0",
+    "version": "1.5.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -12,10 +12,10 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 0,
+      "versionCode": 26,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#8BBFF9"
       },
       "package": "com.austincaron.jellycatapp"
     },
@@ -32,7 +32,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#8BBFF9"
         }
       ],
       [

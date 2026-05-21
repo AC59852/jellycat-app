@@ -1,44 +1,30 @@
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Platform, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Link, usePathname } from 'expo-router';
 
 export default function NavigationBar() {
   const pathname = usePathname();
-
-  // alert(pathname);
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.navbarContainer}>
+    <View style={[styles.navbarContainer, { bottom: Math.max(insets.bottom, 10) }]}>
       <View style={styles.navbarWrapper}>
-        {/* Blur layer */}
-       
-
-        {/* Dark overlay on top of blur */}
         <View style={styles.overlay} />
-
-        {/* Content */}
-        <Link href='/'>
-          <View style={[styles.navIcon, pathname === '/' && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
-            <Image source={require('../assets/icons/homeIcon.png')} style={{width: 24, height: 26}} />
-          </View>
+        <Link href='/' asChild style={[styles.navIcon, pathname === '/' && { backgroundColor: '#4570FF', opacity: 1 }]}>
+          <Pressable>
+            <Image source={require('../assets/icons/homeIcon.png')} style={{ width: 24, height: 26 }} />
+          </Pressable>
         </Link>
-
-        <Link href='/search'>
-          <View style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category') || pathname.startsWith('/search')) && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
-            <Image source={require('../assets/icons/searchIcon.png')} style={{width: 26, height: 26}} />
-          </View>
+        <Link href='/search' asChild style={[styles.navIcon, (pathname.startsWith('/jellycat') || pathname.startsWith('/category') || pathname.startsWith('/search')) && { backgroundColor: '#4570FF', opacity: 1 }]}>
+          <Pressable>
+            <Image source={require('../assets/icons/searchIcon.png')} style={{ width: 26, height: 26 }} />
+          </Pressable>
         </Link>
-
-        {/* <Link href='/'>
-          <View style={styles.navIcon}>
-            <Image source={require('../assets/icons/homeIcon.png')} style={{width: 24, height: 26}} />
-          </View>
-        </Link> */}
-
-        <Link href='/profile'>
-          <View style={[styles.navIcon, pathname === '/profile' && {filter: "brightness(1)", backgroundColor: '#4570FF'}]}>
-            <Image source={require('../assets/icons/profileIcon.png')} style={{width: 34, height: 34,}} />
-          </View>
+        <Link href='/profile' asChild style={[styles.navIcon, (pathname.startsWith('/profile') || pathname.startsWith('/category') || pathname.startsWith('/collections')) && { backgroundColor: '#4570FF', opacity: 1 }]}>
+          <Pressable>
+            <Image source={require('../assets/icons/profileIcon.png')} style={{ width: 34, height: 34 }} />
+          </Pressable>
         </Link>
       </View>
     </View>
@@ -50,7 +36,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 30,
+    bottom: 10,
     alignItems: 'center',
     backgroundColor: "transparent",
     zIndex: 1000,
@@ -79,6 +65,11 @@ const styles = StyleSheet.create({
   width: 46,
   height: 46,
   borderRadius: 3000,
-  filter: "brightness(0.7)"
+  opacity: 0.5,
 },
+
+active: {
+  backgroundColor: '#4570FF',
+  opacity: 1,
+}
 });

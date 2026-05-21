@@ -1,7 +1,8 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Pressable } from "react-native";
 import { useState, useEffect } from 'react';
 import { File, Paths } from 'expo-file-system';
 import HeartSvg from "./HeartSvg";
+import { Link } from "expo-router";
 
 interface ProductCardProps {
   name: string;
@@ -12,9 +13,9 @@ interface ProductCardProps {
   onUnlike?: () => void;
 }
 
-const _width = Dimensions.get('screen').width * 0.435;
-
 const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardProps) => {
+  const { width } = useWindowDimensions();
+  const _width = width * 0.430;
   const [isLiked, setIsLiked] = useState(false);
 
   // Load liked state from file once when component mounts
@@ -59,33 +60,9 @@ const ProductCard = ({ name, image, theme, colour, id, onUnlike }: ProductCardPr
     }
   };
 
-  return (
-    <View style={styles.wrapper}>
-      <View style={styles.imageWrapper}>
-        <Image source={{ uri: image }} style={styles.image} />
-        {/* Like Button */}
-        <View style={styles.iconWrapper}>
-          <TouchableOpacity onPress={() => { toggleLike(); if (onUnlike) onUnlike(); }} style={styles.icon}>
-            <HeartSvg filled={isLiked} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Text */}
-      <View style={styles.textWrapper}>
-        <Text style={styles.tags}>{theme}, {colour}</Text>
-        <Text style={styles.name}>{name}</Text>
-      </View>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
   wrapper: {
     width: _width,
-    display: "flex",
-    flexDirection: "column",
-    flex: 0.5,
     marginBottom: 15,
   },
 
@@ -165,5 +142,40 @@ const styles = StyleSheet.create({
     color: "#333",
   },
 })
+
+  return (
+      <Link
+        href={{
+          pathname: `/(jellycat)/jellycat/[item]`,
+          params: { item: id },
+        }}
+        asChild
+      >
+        <Pressable style={styles.wrapper}>
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: image }}
+              style={styles.image}
+              resizeMethod="resize"
+              resizeMode="cover"
+            />
+            {/* Like Button */}
+            <View style={styles.iconWrapper}>
+              <TouchableOpacity onPress={() => { toggleLike(); if (onUnlike) onUnlike(); }} style={styles.icon}>
+                <HeartSvg filled={isLiked} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* Text */}
+          <View style={styles.textWrapper}>
+            <Text style={styles.tags}>{theme}, {colour}</Text>
+            <Text style={styles.name} numberOfLines={2}>
+              {name}
+            </Text>
+          </View>
+        </Pressable>
+      </Link>
+  );
+};
 
 export default ProductCard;

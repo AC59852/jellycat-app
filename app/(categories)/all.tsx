@@ -72,5 +72,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     columnGap: 14,
     paddingBottom: 40,
+    gap: 14,
   },
 });

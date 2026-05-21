@@ -1,44 +1,35 @@
 import { Link } from "expo-router";
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
 
 const CommunityCard = () => {
   return (
-    <View style={{ width: "97%", height: 252, position: "relative", margin: "auto" }}>
-      <View style={styles.imageWrapper}>
-        <Image
-          source={require("../assets/images/bunny-coffee-running.png")}
-          style={styles.image}
-        />
-      </View>
-      <View style={{ display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: 'center', height: "100%", gap: 24 }}>
+    <ImageBackground
+      source={require("../assets/images/bunny-coffee-running.png")}
+      style={styles.card}
+      imageStyle={styles.image}
+    >
+      <View style={styles.overlay}>
         <Text style={styles.text}>See What the Community is up to!</Text>
-        <Link
-          href="/"
-          style={styles.button}
-          >Explore</Link>
+        <Text style={styles.button}>Coming Soon!</Text>
       </View>
-    </View>
+    </ImageBackground>
   )
 };
 
 const styles = StyleSheet.create({
-  imageWrapper: {
-    width: "100%",
-    height: 242,
-    position: "absolute",
-    top: 0,
-    left: 0,
+  card: {
+    width: "97%",
+    aspectRatio: 1.5,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
-
   image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
     borderRadius: 13,
-    filter: "brightness(0.60)",
   },
-
   text: {
     fontFamily: "Rubik_700Bold",
     fontSize: 28,
@@ -46,7 +37,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-
   button: {
     fontFamily: "Rubik_600SemiBold",
     fontSize: 16,
@@ -58,7 +48,15 @@ const styles = StyleSheet.create({
     textDecorationLine: "none",
     width: "48%",
     marginHorizontal: "auto",
-  }
+  },
+  overlay: {
+  ...StyleSheet.absoluteFillObject,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  borderRadius: 13,
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 24,
+},
 });
 
 export default CommunityCard;

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions, PixelRatio, TouchableOpacity, Pressable } from 'react-native';
 import 'react-native-svg';
 import { Link } from "expo-router";
 import { BlurView } from 'expo-blur';
@@ -15,7 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const text = "Find Your Perfect Companion!";
+  const text = "Where Soft Things Bloom.";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollOffset(scrollRef);
 
@@ -44,8 +44,91 @@ export default function HomeScreen() {
     { name: "Sea Creatures", image: require('@/assets/images/sea-creatures-categories.png') },
   ];
 
+  const { width, height, fontScale, scale } = useWindowDimensions();
+  const heroHeight = height * 0.75; // Match the hero section height
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+    },
+
+    hero: {
+      height: heroHeight,
+      overflow: 'hidden', // contains the image
+      borderBottomLeftRadius: 25,
+      borderBottomRightRadius: 25,
+      marginBottom: 20,
+    },
+
+    heroImageWrapper: {
+      ...StyleSheet.absoluteFillObject,
+      overflow: 'hidden',
+    },
+
+    heroImage: {
+      width: '100%',
+      height: '100%'
+    },
+
+    // This is what we animate for brightness
+    heroOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: 'black', // change to 'white' to simulate brightening instead
+    },
+
+    blurContainer: {
+      position: 'absolute',
+      bottom: 20,
+      left: 15,
+      width: '85%',
+      borderRadius: 13,
+      padding: 14,
+      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    },
+
+    title: {
+      fontFamily: 'Rubik_700Bold',
+    },
+
+    heroTitle: {
+      fontSize: 30,
+      color: 'white',
+    },
+
+    headingSmall: {
+      fontSize: 28,
+      marginLeft: 15,
+    },
+
+    categoriesList: {
+      width: '94%',
+      marginTop: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      alignSelf: 'center',
+      gap: 0,
+      marginBottom: 20,
+    },
+
+    button: {
+      fontFamily: "Rubik_600SemiBold",
+      fontSize: 18,
+      textAlign: "center",
+      color: "white",
+      backgroundColor: "#4570FF",
+      paddingVertical: 20,
+      borderRadius: 4,
+      textDecorationLine: "none",
+      width: "100%",
+      marginHorizontal: "auto",
+      marginTop: 5,
+    },
+  });
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
     <Animated.ScrollView
       style={styles.container}
       ref={scrollRef}
@@ -76,6 +159,15 @@ export default function HomeScreen() {
         </View>
       </View>
 
+      {/* <View>
+        <Text>width: {width}</Text>
+        <Text>height: {height}</Text>
+        <Text>fontScale: {fontScale}</Text>
+        <Text>scale: {scale}</Text>
+        <Text>pixelRatio: {PixelRatio.get()}</Text>
+        <Text>fontScale: {PixelRatio.getFontScale()}</Text>
+      </View> */}
+
       {/* Rest of the scroll content */}
       <View style={{ marginTop: 51 }}>
         <Text style={[styles.title, styles.headingSmall]}>Latest In</Text>
@@ -95,95 +187,24 @@ export default function HomeScreen() {
             <CategoryCard key={index} name={item.name} image={item.image} />
           ))}
         </View>
-        <View style={{ paddingHorizontal: 15, marginBottom: 20 }}>
+        <View style={{ paddingHorizontal: 15 }}>
           <Link href="/(categories)/all" style={styles.button}>
             <Text>View All</Text>
           </Link>
         </View>
       </View>
 
-      <View>
+      {/* <View>
         <CtaSignup />
+      </View> */}
+      {/* footer with copyright year that says "JellyMate. All rights reserved. © {new Date().getFullYear()}" */}
+      <View style={{ paddingVertical: 20, alignItems: 'center', width: '80%', marginHorizontal: 'auto', marginTop: 40, marginBottom: 120 }}>
+        <Link href={'/privacy'}>Privacy Policy</Link>
+        <Text style={{ fontSize: 14, color: '#888', textAlign: 'center' }}>
+          JellyMate © {new Date().getFullYear()}. This site is not affiliated with or authorized by Jellycat Ltd.
+        </Text>
       </View>
     </Animated.ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-
-  hero: {
-    height: 600,
-    overflow: 'hidden', // contains the image
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    marginBottom: 20,
-  },
-
-  heroImageWrapper: {
-    ...StyleSheet.absoluteFillObject,
-    overflow: 'hidden',
-  },
-
-  heroImage: {
-    width: '100%',
-    height: '100%'
-  },
-
-  // This is what we animate for brightness
-  heroOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'black', // change to 'white' to simulate brightening instead
-  },
-
-  blurContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 15,
-    width: '85%',
-    borderRadius: 13,
-    padding: 14,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
-  },
-
-  title: {
-    fontFamily: 'Rubik_700Bold',
-  },
-
-  heroTitle: {
-    fontSize: 30,
-    color: 'white',
-  },
-
-  headingSmall: {
-    fontSize: 28,
-    marginLeft: 15,
-  },
-
-  categoriesList: {
-    width: '93%',
-    marginTop: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    alignSelf: 'center',
-  },
-
-  button: {
-    fontFamily: "Rubik_600SemiBold",
-    fontSize: 18,
-    textAlign: "center",
-    color: "white",
-    backgroundColor: "#4570FF",
-    paddingVertical: 20,
-    borderRadius: 4,
-    textDecorationLine: "none",
-    width: "100%",
-    marginHorizontal: "auto",
-    marginTop: 5,
-  },
-});

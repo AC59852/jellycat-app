@@ -5,7 +5,7 @@ export default function CtaSignup() {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={{aspectRatio: 1.5, width: "100%"}}>
         <Image source={require("../assets/images/bunny-coffee-running.png")} style={styles.image} />
       </View>
       <View style={{ display: "flex", flexDirection: 'column', gap: 13, marginTop: 40 }}>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: "100%",
-    height: 256,
+    height: "100%",
     objectFit: "cover",
     borderRadius: 13,
   },

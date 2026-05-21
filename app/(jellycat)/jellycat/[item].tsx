@@ -6,6 +6,17 @@ import { useEffect, useState } from "react";
 import HeartSvg from "@/components/HeartSvg";
 import BackSvg from "@/components/svgs/BackSvg";
 import { SafeAreaView } from "react-native-safe-area-context";
+import NewCollectionModal from "@/components/NewCollectionModal";
+import SelectCollectionModal from "@/components/SelectCollectionModal";
+
+interface Collection {
+  id: string;
+  name: string;
+  description: string;
+  imageIndex: number;
+  items: any[];
+  createdAt: string;
+}
 
 const JellycatDetailsScreen = () => {
   const { item } = useLocalSearchParams();
@@ -15,47 +26,92 @@ const JellycatDetailsScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLiked, setIsLiked] = useState(false);
 
-   // Load liked state from file once when component mounts
-    useEffect(() => {
-      try {
-        const file = new File(Paths.document, 'likes.json');
-        if (file.exists) {
-          const json = JSON.parse(file.textSync()) as { id: string }[];
-  
-          const liked = json.some(likedItem => likedItem.id === item);
-          setIsLiked(liked);
-        }
-      } catch (err) {
-        console.error('Error reading likes:', err);
+  // Modal states
+  const [showNewCollectionModal, setShowNewCollectionModal] = useState(false);
+  const [showSelectCollectionModal, setShowSelectCollectionModal] = useState(false);
+  const [collections, setCollections] = useState<Collection[]>([]);
+
+  // Load liked state from file once when component mounts
+  useEffect(() => {
+    try {
+      const file = new File(Paths.document, 'likes.json');
+      if (file.exists) {
+        const json = JSON.parse(file.textSync()) as { id: string }[];
+
+        const liked = json.some(likedItem => likedItem.id === item);
+        setIsLiked(liked);
       }
-    }, []);
-  
-    // Toggle like and write to file
-    const toggleLike = () => {
-      try {
-        const file = new File(Paths.document, 'likes.json');
-        let likes: { id: string }[] = [];
-  
-        // Load existing likes file
-        if (file.exists) {
-          likes = JSON.parse(file.textSync());
-        }
-  
-        if (!isLiked) {
-          // LIKE the product
-          likes.push({ id: item as string });
-          file.write(JSON.stringify(likes));
-          setIsLiked(true);
-        } else {
-          // UNLIKE the product
-          likes = likes.filter((likedItem) => likedItem.id !== item);
-          file.write(JSON.stringify(likes));
-          setIsLiked(false);
-        }
-      } catch (err) {
-        console.error('Error writing like file:', err);
+    } catch (err) {
+      console.error('Error reading likes:', err);
+    }
+  }, []);
+
+  // Toggle like and write to file
+  const toggleLike = () => {
+    try {
+      const file = new File(Paths.document, 'likes.json');
+      let likes: { id: string }[] = [];
+
+      // Load existing likes file
+      if (file.exists) {
+        likes = JSON.parse(file.textSync());
       }
-    };
+
+      if (!isLiked) {
+        // LIKE the product
+        likes.push({ id: item as string });
+        file.write(JSON.stringify(likes));
+        setIsLiked(true);
+      } else {
+        // UNLIKE the product
+        likes = likes.filter((likedItem) => likedItem.id !== item);
+        file.write(JSON.stringify(likes));
+        setIsLiked(false);
+      }
+    } catch (err) {
+      console.error('Error writing like file:', err);
+    }
+  };
+
+  // Load collections from file
+  const loadCollections = () => {
+    try {
+      const file = new File(Paths.document, 'collection.json');
+      if (file.exists) {
+        const collectionList = JSON.parse(file.textSync()) as Collection[];
+        setCollections(collectionList);
+        return collectionList;
+      }
+      return [];
+    } catch (err) {
+      console.error('Error loading collections:', err);
+      return [];
+    }
+  };
+
+  // Handle "Add to Collection" button press
+  const handleAddToCollection = () => {
+    const loadedCollections = loadCollections();
+    
+    if (loadedCollections.length === 0) {
+      // No collections exist - show new collection modal
+      setShowNewCollectionModal(true);
+    } else {
+      // Collections exist - show collection selector
+      setShowSelectCollectionModal(true);
+    }
+  };
+
+  // Handle new collection created
+  const handleCollectionCreated = () => {
+    setShowNewCollectionModal(false);
+    setShowSelectCollectionModal(true);
+  };
+
+  // Handle modal close/updates
+  const handleCollectionAdded = () => {
+    setShowSelectCollectionModal(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,49 +152,65 @@ const JellycatDetailsScreen = () => {
   }
 
   return (
-  <SafeAreaView>
-    <ScrollView contentContainerStyle={styles.scrollContent}>
-      <View style={styles.wrapper}>
-        <TouchableOpacity style={styles.backButton} onPress={() => Router.back()}>
-          <BackSvg />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => { toggleLike(); }} style={styles.icon}>
-            <HeartSvg  filled={isLiked} />
-          </TouchableOpacity>
-        <View style={styles.imageWrapper}>
-          <Image source={{ uri: data.image }} style={styles.image} />
-        </View>
-        <Text style={styles.title}>{data.name}</Text>
-        <Text style={styles.description}>{data.description}</Text>
+    <>
+      <SafeAreaView>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.wrapper}>
+            <TouchableOpacity style={styles.backButton} onPress={() => Router.back()}>
+              <BackSvg />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { toggleLike(); }} style={styles.icon}>
+              <HeartSvg filled={isLiked} />
+            </TouchableOpacity>
+            <View style={styles.imageWrapper}>
+              <Image source={{ uri: data.image }} style={styles.image} />
+            </View>
+            <Text style={styles.title}>{data.name}</Text>
+            <Text style={styles.description}>{data.description}</Text>
 
-        {/* Button pinned to bottom */}
-        <TouchableOpacity onPress={() => alert("Added to My Collection")} style={styles.addButton}>
-          <Text style={styles.addButtonText}>Add to My Collection</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.moreInfoWrapper}>
-        <Text style={[styles.title, styles.titleSmall]}>More Info</Text>
-        {/* colours, release date, and category in a horizontal row each with a title and then their descriptor */}
-        <View style={{ flexDirection: 'row', marginTop: 20, gap: 25, marginBottom: 80 }}>
-          <View>
-            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Colours</Text>
-            <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.colour}</Text>
+            {/* Button pinned to bottom */}
+            <TouchableOpacity onPress={handleAddToCollection} style={styles.addButton}>
+              <Text style={styles.addButtonText}>Add to My Collection</Text>
+            </TouchableOpacity>
           </View>
-          <View style={{flex: 1}}>
-            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Release Date</Text>
-            <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.releaseDate}</Text>
+          <View style={styles.moreInfoWrapper}>
+            <Text style={[styles.title, styles.titleSmall]}>More Info</Text>
+            {/* colours, release date, and category in a horizontal row each with a title and then their descriptor */}
+            <View style={{ flexDirection: 'row', marginTop: 20, gap: 25, marginBottom: 80 }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Colours</Text>
+                <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.colour}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Release Date</Text>
+                <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.releaseDate}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Category</Text>
+                <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.theme}</Text>
+              </View>
+            </View>
           </View>
-          <View style={{flex: 1}}>
-            <Text style={{ fontFamily: 'Rubik_500Medium', fontSize: 16, color: '#333333' }}>Category</Text>
-            <Text style={{ fontFamily: 'Rubik_400Regular', fontSize: 14, color: '#666666', marginTop: 4 }}>{data.theme}</Text>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
-  </SafeAreaView>
-);
+        </ScrollView>
+      </SafeAreaView>
 
-}
+      {/* New Collection Modal - shown when user has no collections */}
+      <NewCollectionModal
+        visible={showNewCollectionModal}
+        onClose={() => setShowNewCollectionModal(false)}
+        onCreated={handleCollectionCreated}
+      />
+
+      {/* Select Collection Modal - tap to add item to collection */}
+      <SelectCollectionModal
+        visible={showSelectCollectionModal}
+        itemData={data}
+        onClose={() => setShowSelectCollectionModal(false)}
+        onAdded={handleCollectionAdded}
+      />
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
